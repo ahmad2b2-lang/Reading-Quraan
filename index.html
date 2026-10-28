@@ -272,10 +272,10 @@
           <label id="pin-label">رمز الدخول</label>
           <div class="pin-dots" id="pin-dots" aria-live="polite"></div>
           <div class="keypad" id="keypad">
-            <button type="button" data-k="1">١</button><button type="button" data-k="2">٢</button><button type="button" data-k="3">٣</button>
-            <button type="button" data-k="4">٤</button><button type="button" data-k="5">٥</button><button type="button" data-k="6">٦</button>
-            <button type="button" data-k="7">٧</button><button type="button" data-k="8">٨</button><button type="button" data-k="9">٩</button>
-            <button type="button" data-k="clear" class="soft" aria-label="مسح الكل">مسح</button><button type="button" data-k="0">٠</button><button type="button" data-k="back" class="soft" aria-label="حذف رقم">⌫</button>
+            <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button>
+            <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button>
+            <button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button>
+            <button type="button" data-k="clear" class="soft" aria-label="مسح الكل">مسح</button><button type="button" data-k="0">0</button><button type="button" data-k="back" class="soft" aria-label="حذف رقم">⌫</button>
           </div>
         </div>
         <button class="btn" id="auth-submit" type="submit">دخول</button>
@@ -452,7 +452,7 @@
   function setPinStep() {
     const signup = mode === "signup";
     $("pin-label").textContent = !signup ? "رمز الدخول"
-      : firstPin === null ? "اختر رمز دخول (٤ أرقام على الأقل)" : "أعد إدخال الرمز للتأكيد";
+      : firstPin === null ? "اختر رمز دخول (4 أرقام على الأقل)" : "أعد إدخال الرمز للتأكيد";
     $("auth-submit").textContent = !signup ? "دخول" : firstPin === null ? "التالي" : "إنشاء الحساب";
     $("pin-restart").hidden = !(signup && firstPin !== null);
     pin = ""; renderPin();
@@ -493,7 +493,7 @@
     err.textContent = "";
 
     if ([...username].length < 2) { err.textContent = "اكتب اسم المستخدم (حرفان على الأقل)"; return; }
-    if (pin.length < PIN_MIN) { err.textContent = "الرمز ٤ أرقام على الأقل"; return; }
+    if (pin.length < PIN_MIN) { err.textContent = "الرمز 4 أرقام على الأقل"; return; }
 
     if (mode === "signup" && firstPin === null) { firstPin = pin; setPinStep(); return; }
     if (mode === "signup" && pin !== firstPin) {
