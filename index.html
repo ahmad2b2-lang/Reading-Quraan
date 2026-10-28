@@ -86,8 +86,19 @@
     background: #fff; color: var(--ink); font-size: 17px; outline: none;
   }
   .field input:focus { border-color: var(--green); }
-  .field input.ltr { direction: ltr; text-align: left; }
   .hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .pin-field label { text-align: center; }
+  .pin-dots { display: flex; justify-content: center; gap: 12px; height: 22px; margin: 4px 0 14px; direction: ltr; }
+  .pin-dots i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--green); }
+  .pin-dots i.on { background: var(--green); }
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; direction: ltr; max-width: 300px; margin: 0 auto 16px; }
+  .keypad button {
+    height: 56px; border-radius: 14px; border: 1px solid var(--line); background: #fff;
+    color: var(--ink); font-size: 26px; font-weight: 600; cursor: pointer; touch-action: manipulation;
+  }
+  .keypad button:active { background: var(--green-soft); }
+  .keypad button.soft { font-size: 16px; color: var(--muted); background: var(--paper); }
+  #pin-restart { display: block; margin: 6px auto 0; }
 
   /* ---------- Home ---------- */
   .home-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 0 6px; }
@@ -213,19 +224,21 @@
       <form id="auth-form" novalidate>
         <div class="field">
           <label for="f-user">اسم المستخدم</label>
-          <input id="f-user" class="ltr" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" required>
-          <div class="hint" id="user-hint" hidden>أحرف إنجليزية صغيرة وأرقام و _ فقط (٣–٢٠)</div>
+          <input id="f-user" dir="auto" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" enterkeyhint="next">
+          <div class="hint" id="user-hint" hidden>بالعربية أو الإنجليزية، حرفان على الأقل</div>
         </div>
-        <div class="field">
-          <label for="f-pass">كلمة المرور</label>
-          <input id="f-pass" class="ltr" type="password" autocomplete="current-password" required>
-        </div>
-        <div class="field" id="confirm-wrap" hidden>
-          <label for="f-pass2">تأكيد كلمة المرور</label>
-          <input id="f-pass2" class="ltr" type="password" autocomplete="new-password">
-          <div class="hint">٦ أحرف على الأقل</div>
+        <div class="field pin-field">
+          <label id="pin-label">رمز الدخول</label>
+          <div class="pin-dots" id="pin-dots" aria-live="polite"></div>
+          <div class="keypad" id="keypad">
+            <button type="button" data-k="1">١</button><button type="button" data-k="2">٢</button><button type="button" data-k="3">٣</button>
+            <button type="button" data-k="4">٤</button><button type="button" data-k="5">٥</button><button type="button" data-k="6">٦</button>
+            <button type="button" data-k="7">٧</button><button type="button" data-k="8">٨</button><button type="button" data-k="9">٩</button>
+            <button type="button" data-k="clear" class="soft" aria-label="مسح الكل">مسح</button><button type="button" data-k="0">٠</button><button type="button" data-k="back" class="soft" aria-label="حذف رقم">⌫</button>
+          </div>
         </div>
         <button class="btn" id="auth-submit" type="submit">دخول</button>
+        <button class="link" id="pin-restart" type="button" hidden>إعادة اختيار الرمز</button>
         <p class="error" id="auth-error"></p>
       </form>
     </div>
@@ -359,33 +372,77 @@
     return data;
   }
 
-  // ---------- Auth ----------
+  // ---------- Auth (username + PIN) ----------
+  // These three must match the quran-signup edge function.
+  const normalizeName = (u) => u.normalize("NFKC").trim().replace(/\s+/g, " ").toLowerCase();
+  async function emailFor(u) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(u));
+    const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    return `u${hex.slice(0, 40)}@${EMAIL_DOMAIN}`;
+  }
+  const passwordFor = (pin) => `rq-pin-${pin}`;
+  const PIN_MIN = 4, PIN_MAX = 8;
+
   let mode = "login";
+  let pin = "";
+  let firstPin = null;   // during sign-up: the PIN chosen in step 1, awaiting confirmation
+
+  function renderPin() {
+    const dots = $("pin-dots"); dots.innerHTML = "";
+    const slots = Math.max(PIN_MIN, pin.length);
+    for (let i = 0; i < slots; i++) { const d = document.createElement("i"); if (i < pin.length) d.className = "on"; dots.appendChild(d); }
+    $("auth-submit").disabled = pin.length < PIN_MIN;
+  }
+  function setPinStep() {
+    const signup = mode === "signup";
+    $("pin-label").textContent = !signup ? "رمز الدخول"
+      : firstPin === null ? "اختر رمز دخول (٤ أرقام على الأقل)" : "أعد إدخال الرمز للتأكيد";
+    $("auth-submit").textContent = !signup ? "دخول" : firstPin === null ? "التالي" : "إنشاء الحساب";
+    $("pin-restart").hidden = !(signup && firstPin !== null);
+    pin = ""; renderPin();
+  }
   function setMode(m) {
-    mode = m;
+    mode = m; firstPin = null;
     $("tab-login").classList.toggle("on", m === "login");
     $("tab-signup").classList.toggle("on", m === "signup");
-    $("confirm-wrap").hidden = m !== "signup";
     $("user-hint").hidden = m !== "signup";
-    $("auth-submit").textContent = m === "login" ? "دخول" : "إنشاء الحساب";
-    $("f-pass").autocomplete = m === "login" ? "current-password" : "new-password";
     $("auth-error").textContent = "";
+    setPinStep();
   }
   $("tab-login").onclick = () => setMode("login");
   $("tab-signup").onclick = () => setMode("signup");
+  $("pin-restart").onclick = () => { firstPin = null; $("auth-error").textContent = ""; setPinStep(); };
+
+  function pressKey(k) {
+    if (k === "back") pin = pin.slice(0, -1);
+    else if (k === "clear") pin = "";
+    else if (/^[0-9]$/.test(k) && pin.length < PIN_MAX) pin += k;
+    $("auth-error").textContent = "";
+    renderPin();
+  }
+  $("keypad").onclick = (e) => { const b = e.target.closest("button"); if (b) pressKey(b.dataset.k); };
+  // Physical keyboards / desktop: digits go to the PIN unless typing the username.
+  document.addEventListener("keydown", (e) => {
+    if ($("s-auth").hidden || e.target === $("f-user")) return;
+    const k = e.key.replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+    if (/^[0-9]$/.test(k)) pressKey(k);
+    else if (e.key === "Backspace") pressKey("back");
+  });
+  $("f-user").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); $("f-user").blur(); } });
 
   $("auth-form").onsubmit = async (e) => {
     e.preventDefault();
     const err = $("auth-error");
-    const username = $("f-user").value.trim().toLowerCase();
-    const password = $("f-pass").value;
+    const username = normalizeName($("f-user").value);
     err.textContent = "";
 
-    if (!/^[a-z0-9_]{3,20}$/.test(username)) {
-      err.textContent = "اسم المستخدم: أحرف إنجليزية صغيرة وأرقام و _ فقط (من ٣ إلى ٢٠)"; return;
+    if ([...username].length < 2) { err.textContent = "اكتب اسم المستخدم (حرفان على الأقل)"; return; }
+    if (pin.length < PIN_MIN) { err.textContent = "الرمز ٤ أرقام على الأقل"; return; }
+
+    if (mode === "signup" && firstPin === null) { firstPin = pin; setPinStep(); return; }
+    if (mode === "signup" && pin !== firstPin) {
+      firstPin = null; setPinStep(); err.textContent = "الرمزان غير متطابقين، اختر الرمز من جديد"; return;
     }
-    if (password.length < 6) { err.textContent = "كلمة المرور ٦ أحرف على الأقل"; return; }
-    if (mode === "signup" && password !== $("f-pass2").value) { err.textContent = "كلمتا المرور غير متطابقتين"; return; }
 
     const btn = $("auth-submit"); btn.disabled = true;
     try {
@@ -393,28 +450,31 @@
         const res = await fetch(`${SUPABASE_URL}/functions/v1/quran-signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json", apikey: SUPABASE_KEY },
-          body: JSON.stringify({ username, password })
+          body: JSON.stringify({ username, pin })
         });
         const body = await res.json().catch(() => ({}));
         if (!res.ok) {
+          firstPin = null; setPinStep();
           err.textContent = body.error === "username_taken" ? "اسم المستخدم مستخدم، اختر اسمًا آخر"
             : "تعذّر إنشاء الحساب، حاول مرة أخرى";
           return;
         }
       }
-      const { error } = await sb.auth.signInWithPassword({ email: `${username}@${EMAIL_DOMAIN}`, password });
+      const { error } = await sb.auth.signInWithPassword({ email: await emailFor(username), password: passwordFor(pin) });
       if (error) {
-        err.textContent = /invalid/i.test(error.message) ? "اسم المستخدم أو كلمة المرور غير صحيحة" : "تعذّر تسجيل الدخول، تحقق من الاتصال";
+        pin = ""; renderPin();
+        err.textContent = /invalid/i.test(error.message) ? "اسم المستخدم أو الرمز غير صحيح" : "تعذّر تسجيل الدخول، تحقق من الاتصال";
         return;
       }
-      $("f-pass").value = ""; $("f-pass2").value = "";
+      firstPin = null; pin = ""; renderPin();
       await enterApp(true);
     } catch {
       err.textContent = "تعذّر الاتصال، تحقق من الإنترنت";
     } finally {
-      btn.disabled = false;
+      btn.disabled = pin.length < PIN_MIN;
     }
   };
+  setMode("login");
 
   $("logout").onclick = async () => {
     await sb.auth.signOut();

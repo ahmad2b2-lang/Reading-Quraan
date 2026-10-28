@@ -2,7 +2,7 @@
 
 A minimal, mobile-friendly webapp for reading the Quran one session at a time.
 
-- Sign up with a username and password (no email needed).
+- Sign up with any username (Arabic or English) and a PIN of 4+ digits, entered on an on-screen keypad (no email needed).
 - On opening the app, choose how many pages to read this session (default 1).
 - Pages follow the Madinah mushaf (604 pages), starting from page 1.
 - Progress is saved after every page, so you resume where you stopped.
