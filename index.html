@@ -207,6 +207,8 @@
     display: flex; justify-content: space-between; font-family: "KFGQPC Hafs", serif;
     font-size: 17px; color: var(--green-dark); border-bottom: 1px solid var(--gold-soft); padding-bottom: 6px;
   }
+  /* Regular font for the juz number: the Quran font draws digits as ayah markers */
+  .mushaf-head .plain { font-family: "Noto Naskh Arabic", "Segoe UI", Tahoma, sans-serif; font-size: 15px; }
   .mushaf-text {
     font-family: "KFGQPC Hafs", serif; font-size: var(--quran-size); line-height: 2.05;
     text-align: justify; text-align-last: center; color: #111; padding: 10px 2px 4px;
@@ -641,7 +643,7 @@
     box.innerHTML = "";
     const head = el("div", "mushaf-head");
     head.appendChild(el("span", null, "سورة " + d.surahs[0]));
-    head.appendChild(el("span", null, "الجزء " + ar(d.juz)));
+    head.appendChild(el("span", "plain", "الجزء " + ar(d.juz)));
     const text = el("div", "mushaf-text" + (n <= 2 ? " centered" : ""));
     for (const a of d.ayat) {
       if (a.a === 1) {
