@@ -125,24 +125,49 @@
   }
   .field input:focus { border-color: var(--green); }
   .hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
-  .pin-field label { text-align: center; }
-  .pin-dots { display: flex; justify-content: center; gap: 12px; height: 22px; margin: 4px 0 14px; direction: ltr; }
-  .pin-dots i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--green); }
+  /* Login screen: always fits one screen, even a small phone with browser bars.
+     The keypad keys shrink with the screen height (between 38px and 56px). */
+  .auth {
+    min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; justify-content: center;
+    padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+  .auth-brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
+  .auth-brand .mark {
+    width: 44px; height: 44px; border-radius: 13px; flex: none; background: var(--green); color: var(--gold-soft);
+    display: grid; place-items: center; font-family: "KFGQPC Hafs", serif; font-size: 24px;
+  }
+  .auth-brand h1 { margin: 0; font-size: 22px; line-height: 1.3; color: var(--green-dark); }
+  .auth-brand p { margin: 0; font-size: 13px; color: var(--muted); display: none; }
+  @media (min-height: 720px) { .auth-brand p { display: block; } .auth-brand { margin-bottom: 18px; } }
+  .auth-card { padding: 14px; }
+  .auth .tabs { margin-bottom: 10px; }
+  .auth .tabs button { padding: 8px; }
+  .auth .field { margin-bottom: 4px; }
+  .auth .field input { padding: 11px 14px; }
+  .auth .field input::placeholder { color: #9b978a; }
+  .status { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 26px; margin: 4px 0; font-size: 15px; color: var(--muted); text-align: center; }
+  .status #pin-restart { padding: 0; font-size: 14px; }
+  .status #auth-error { margin: 0; min-height: 0; }
+  .status #auth-error:empty { display: none; }
+  .status:has(#auth-error:not(:empty)) #pin-label,
+  .status:has(#auth-error:not(:empty)) #pin-restart { display: none; }
+  .pin-dots { display: flex; justify-content: center; gap: 12px; height: 16px; margin: 2px 0 10px; direction: ltr; }
+  .pin-dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--green); }
   .pin-dots i.on { background: var(--green); }
-  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; direction: ltr; max-width: 300px; margin: 0 auto 16px; }
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; direction: ltr; max-width: 300px; margin: 0 auto 10px; }
   .keypad button {
-    height: 56px; border-radius: 14px; border: 1px solid var(--line); background: #fff;
-    color: var(--ink); font-size: 26px; font-weight: 600; cursor: pointer; touch-action: manipulation;
+    height: clamp(38px, calc((100vh - 336px) / 4 - 8px), 56px);
+    height: clamp(38px, calc((100dvh - 336px) / 4 - 8px), 56px);
+    border-radius: 14px; border: 1px solid var(--line); background: #fff;
+    color: var(--ink); font-size: 24px; font-weight: 600; cursor: pointer; touch-action: manipulation;
   }
   .keypad button:active { background: var(--green-soft); }
   .keypad button.soft { font-size: 16px; color: var(--muted); background: var(--paper); }
-  #pin-restart { display: block; margin: 6px auto 0; }
+  .auth #auth-submit { padding: 12px 18px; }
 
   /* ---------- Home ---------- */
   .home-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 0 6px; }
-  .install[hidden] + .home-top { padding-top: calc(18px + env(safe-area-inset-top)); }
-  #s-auth .brand { padding-top: calc(48px + env(safe-area-inset-top)); }
-  .home-top .hello { font-size: 18px; font-weight: 600; color: var(--green-dark); }
+  .install[hidden] + .home-top { padding-top: calc(18px + env(safe-area-inset-top)); }  .home-top .hello { font-size: 18px; font-weight: 600; color: var(--green-dark); }
   .next-card { text-align: center; margin-top: 18px; }
   .next-card .label { color: var(--muted); font-size: 15px; }
   .next-card .page-no { font-size: 56px; font-weight: 700; color: var(--green); line-height: 1.2; }
@@ -252,25 +277,26 @@
 
 <!-- Login / sign up -->
 <section id="s-auth" class="screen" hidden>
-  <div class="wrap">
-    <div class="brand">
+  <div class="wrap auth">
+    <div class="auth-brand">
       <div class="mark">ق</div>
-      <h1>ورد القرآن</h1>
-      <p>اقرأ وِردك بتأنٍّ، صفحة بعد صفحة</p>
+      <div><h1>ورد القرآن</h1><p>اقرأ وِردك بتأنٍّ، صفحة بعد صفحة</p></div>
     </div>
-    <div class="card">
+    <div class="card auth-card">
       <div class="tabs" role="tablist">
         <button type="button" id="tab-login" class="on">تسجيل الدخول</button>
         <button type="button" id="tab-signup">حساب جديد</button>
       </div>
       <form id="auth-form" novalidate>
         <div class="field">
-          <label for="f-user">اسم المستخدم</label>
-          <input id="f-user" dir="auto" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" enterkeyhint="next">
-          <div class="hint" id="user-hint" hidden>بالعربية أو الإنجليزية، حرفان على الأقل</div>
+          <input id="f-user" dir="auto" placeholder="اسم المستخدم" aria-label="اسم المستخدم" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" enterkeyhint="next">
         </div>
-        <div class="field pin-field">
-          <label id="pin-label">رمز الدخول</label>
+        <div class="pin-field">
+          <div class="status">
+            <span id="pin-label">رمز الدخول</span>
+            <button class="link" id="pin-restart" type="button" hidden>تغيير الرمز</button>
+            <p class="error" id="auth-error" role="alert"></p>
+          </div>
           <div class="pin-dots" id="pin-dots" aria-live="polite"></div>
           <div class="keypad" id="keypad">
             <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button>
@@ -280,8 +306,6 @@
           </div>
         </div>
         <button class="btn" id="auth-submit" type="submit">دخول</button>
-        <button class="link" id="pin-restart" type="button" hidden>إعادة اختيار الرمز</button>
-        <p class="error" id="auth-error"></p>
       </form>
     </div>
   </div>
@@ -462,7 +486,7 @@
     mode = m; firstPin = null;
     $("tab-login").classList.toggle("on", m === "login");
     $("tab-signup").classList.toggle("on", m === "signup");
-    $("user-hint").hidden = m !== "signup";
+    $("f-user").placeholder = m === "signup" ? "اختر اسم مستخدم (بالعربية أو الإنجليزية)" : "اسم المستخدم";
     $("auth-error").textContent = "";
     setPinStep();
   }
