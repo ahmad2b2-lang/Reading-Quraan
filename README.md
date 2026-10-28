@@ -9,8 +9,8 @@ A minimal, mobile-friendly webapp for reading the Quran one session at a time.
 - A session ends when its pages are done; start a new one from the main page.
 - Installable to the phone home screen (button at the top of the main page).
 
-**Status:** pages 1–20 are included while the app is being fine-tuned.
-To add more, generate `pages/<n>.json` files and raise `AVAILABLE_PAGES` in `index.html`.
+**Status:** the complete mushaf (all 604 pages, 6236 ayat) is included. After page 604 the reader
+finishes a khatma, the session ends with a short congratulation, and reading restarts at Al-Fatihah.
 
 ## Files
 - `index.html` — the whole app (Supabase login + reader)

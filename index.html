@@ -340,7 +340,7 @@
 <section id="s-done" class="screen" hidden>
   <div class="wrap done">
     <div class="mark">🌿</div>
-    <h2>تقبَّل الله منك</h2>
+    <h2 id="d-title">تقبَّل الله منك</h2>
     <p id="d-text"></p>
     <button class="btn ghost" id="back-home" type="button">العودة إلى الصفحة الرئيسية</button>
   </div>
@@ -381,7 +381,7 @@
   const SUPABASE_URL = "https://bhfgwlkzkbwcwyoypwhy.supabase.co";
   const SUPABASE_KEY = "sb_publishable_9YylflVQca-62NHsBKSTeA_GY896nj3";
   const EMAIL_DOMAIN = "readers.reading-quraan.local"; // hidden; users only see usernames
-  const AVAILABLE_PAGES = 20;   // pages currently in /pages (raise as more are added, up to 604)
+  const AVAILABLE_PAGES = 604;  // pages in /pages (the whole mushaf)
   const TOTAL_PAGES = 604;
   const MAX_SESSION = 20;
 
@@ -640,7 +640,7 @@
 
     box.innerHTML = "";
     const head = el("div", "mushaf-head");
-    head.appendChild(el("span", null, "سورة " + d.surahs[d.surahs.length - 1]));
+    head.appendChild(el("span", null, "سورة " + d.surahs[0]));
     head.appendChild(el("span", null, "الجزء " + ar(d.juz)));
     const text = el("div", "mushaf-text" + (n <= 2 ? " centered" : ""));
     for (const a of d.ayat) {
@@ -653,7 +653,7 @@
     }
     box.append(head, text, el("div", "mushaf-foot", ar(n)));
     window.scrollTo(0, 0);
-    if (n < AVAILABLE_PAGES) loadPage(n + 1).catch(() => {});
+    loadPage(n < AVAILABLE_PAGES ? n + 1 : 1).catch(() => {});
     setTimeout(() => { $("next").disabled = false; }, 700); // guards against an accidental double tap
   }
 
@@ -665,9 +665,11 @@
     try {
       const { data, error } = await sb.rpc("quran_complete_page", { p_page: page });
       if (error || !data) throw error || new Error("save");
+      const finishedKhatma = data.khatmas > reader.khatmas;
       reader = data;
       session.done++;
-      if (session.done >= session.goal || reader.current_page > AVAILABLE_PAGES) finishSession();
+      if (finishedKhatma) finishSession(true);   // end the session at the end of the mushaf
+      else if (session.done >= session.goal || reader.current_page > AVAILABLE_PAGES) finishSession();
       else renderReader();
     } catch {
       toast("لم يُحفظ التقدّم، تحقق من الاتصال ثم حاول مرة أخرى");
@@ -684,13 +686,16 @@
     show("s-home");
   };
 
-  function finishSession() {
+  function finishSession(khatma = false) {
     const n = session.done;
     const pagesWord = n === 1 ? "صفحة واحدة" : n === 2 ? "صفحتين" : `${ar(n)} صفحات`;
     const next = reader.current_page <= AVAILABLE_PAGES
       ? `وِردك القادم يبدأ من الصفحة ${ar(reader.current_page)}.`
       : `أتممت الصفحات المتاحة حاليًا.`;
-    $("d-text").textContent = `قرأت ${pagesWord} في هذه الجلسة. ${next}`;
+    $("d-title").textContent = khatma ? "مبارك ختم القرآن" : "تقبَّل الله منك";
+    $("d-text").textContent = khatma
+      ? `هذه ختمتك رقم ${ar(reader.khatmas)}. تقبَّل الله منك، وختمتك التالية تبدأ من سورة الفاتحة.`
+      : `قرأت ${pagesWord} في هذه الجلسة. ${next}`;
     session = null;
     show("s-done");
   }
