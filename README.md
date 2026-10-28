@@ -7,6 +7,7 @@ A minimal, mobile-friendly webapp for reading the Quran one session at a time.
 - Pages follow the Madinah mushaf (604 pages), starting from page 1.
 - Progress is saved after every page, so you resume where you stopped.
 - A session ends when its pages are done; start a new one from the main page.
+- Installable to the phone home screen (button at the top of the main page).
 
 **Status:** pages 1–20 are included while the app is being fine-tuned.
 To add more, generate `pages/<n>.json` files and raise `AVAILABLE_PAGES` in `index.html`.
@@ -15,6 +16,7 @@ To add more, generate `pages/<n>.json` files and raise `AVAILABLE_PAGES` in `ind
 - `index.html` — the whole app (Supabase login + reader)
 - `pages/<n>.json` — text of each mushaf page
 - `fonts/hafs.18.woff2` — KFGQPC Uthmanic Hafs font
+- `manifest.webmanifest`, `sw.js`, `icons/` — installable home-screen app, works offline once opened
 
 ## Backend
 Supabase (shared project, separate objects): table `quran_readers`,
