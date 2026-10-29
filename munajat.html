@@ -172,10 +172,6 @@ button,input{font-family:inherit;color:inherit}
   <div class="box">
     <h3>الإعدادات</h3>
     <div class="sec">
-      <b>سرعة القراءة (لتقدير الوقت)</b>
-      <div class="chips" id="wpmChips"></div>
-    </div>
-    <div class="sec">
       <b>حجم الخط</b>
       <input type="range" id="fsRange" min="20" max="46" step="2">
       <div class="prev" id="fsPrev" style="font-size:28px">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
@@ -385,7 +381,7 @@ const store=(()=>{try{localStorage.setItem("__t","1");localStorage.removeItem("_
 const load=(k,d)=>{try{const v=store.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}};
 const save=(k,v)=>{try{store.setItem(k,JSON.stringify(v))}catch(e){}};
 
-let cfg=Object.assign({wpm:110,fs:28},load("mr_cfg",{}));
+let cfg=Object.assign({wpm:110,fs:28},load("mr_cfg",{}));cfg.wpm=110; // سرعة ثابتة (متوسطة)
 let hist=load("mr_hist",{});   // آخر قراءة لكل عنصر
 let done=load("mr_done",{});   // عدد مرات إتمام كل عنصر
 const saveCfg=()=>save("mr_cfg",cfg);
@@ -589,13 +585,10 @@ $("#readBody").addEventListener("click",e=>{
 });
 
 /* ---------- الإعدادات ---------- */
-const WPM=[["بطيء",80],["متوسط",110],["سريع",140]];
 function renderCfg(){
-  $("#wpmChips").innerHTML=WPM.map(([n,v])=>`<button class="chip${cfg.wpm===v?" on":""}" data-w="${v}">${n}</button>`).join("");
   $("#fsRange").value=cfg.fs;$("#fsPrev").style.fontSize=cfg.fs+"px";
   document.documentElement.style.setProperty("--fs",cfg.fs+"px");
 }
-$("#wpmChips").addEventListener("click",e=>{const c=e.target.closest("[data-w]");if(!c)return;cfg.wpm=+c.dataset.w;saveCfg();renderCfg();renderHome()});
 $("#fsRange").addEventListener("input",e=>{cfg.fs=+e.target.value;saveCfg();renderCfg()});
 $("#openSettings").addEventListener("click",()=>{$("#sheet").hidden=false});
 $("#fontBtn").addEventListener("click",()=>{$("#sheet").hidden=false});
