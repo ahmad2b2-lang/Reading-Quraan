@@ -44,11 +44,6 @@ button,input{font-family:inherit;color:inherit}
 .sug b{display:block}
 .sug small{color:var(--muted)}
 .sug button{border:0;background:var(--soft);color:var(--accent-d);font-weight:700;border-radius:12px;padding:9px 16px;font-size:16px;cursor:pointer;white-space:nowrap}
-.track{display:flex;flex-wrap:wrap;gap:8px}
-.tk{font-size:14.5px;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:5px 10px;color:var(--muted)}
-.tk.ok{background:var(--soft);border-color:#b7d6c9;color:var(--accent-d)}
-.tk.pend{border-style:dashed;opacity:.6}
-.tk.ok::before{content:"✓ ";font-weight:700}
 .note{color:var(--muted);font-size:14px;margin:10px 0 0}
 .linkbtn{background:none;border:0;color:var(--accent-d);text-decoration:underline;font-size:15px;cursor:pointer;padding:8px 0}
 .center{text-align:center}
@@ -128,11 +123,6 @@ button,input{font-family:inherit;color:inherit}
     <div id="sugList"></div>
   </div>
 
-  <div class="card">
-    <h3>المناجاة الخمس عشرة <span id="trackCount" style="color:var(--muted);font-weight:400"></span></h3>
-    <div class="track" id="track"></div>
-    <p class="note" id="pendNote" hidden></p>
-  </div>
 
   <div class="center"><button class="linkbtn" id="openSettings">الإعدادات</button></div>
 </section>
@@ -160,10 +150,6 @@ button,input{font-family:inherit;color:inherit}
   <h2>تقبّل الله منك</h2>
   <p class="center" style="color:var(--muted);margin:0" id="endSub"></p>
   <div class="card"><h3>ما قرأته الآن</h3><ul id="endList"></ul></div>
-  <div class="card">
-    <h3>المناجاة الخمس عشرة <span id="trackCount2" style="color:var(--muted);font-weight:400"></span></h3>
-    <div class="track" id="track2"></div>
-  </div>
   <button class="btn primary" id="homeBtn">العودة للرئيسية</button>
 </section>
 
@@ -470,27 +456,11 @@ function suggestions(){
   return s.map(([id,why])=>({it:byId(id),why})).filter(x=>x.it&&!x.it.pending);
 }
 
-/* إعادة ضبط علامات الإنجاز عند منتصف الليل */
-let _day=todayKey();
-function dayCheck(){if(todayKey()!==_day){_day=todayKey();if(!$("#home").hidden)renderHome()}}
-setInterval(dayCheck,30000);
-document.addEventListener("visibilitychange",()=>{if(!document.hidden)dayCheck()});
-
 /* ======================= الشاشات ======================= */
 const screens=["home","read","end"];
 function show(n){screens.forEach(s=>{$("#"+s).hidden=s!==n});window.scrollTo(0,0)}
 
-function renderTrack(box,cnt){
-  const m=LIB.filter(x=>x.grp==="munajat").sort((a,b)=>a.num-b.num);
-  box.innerHTML=m.map(x=>`<span class="tk${isDone(x.id)?" ok":""}${x.pending?" pend":""}">${x.title.replace("مناجاة ","")}</span>`).join("");
-  const c=m.filter(x=>isDone(x.id)).length;
-  cnt.textContent=`(${ar(c)} من ${ar(m.length)})`;
-}
 function renderHome(){
-  renderTrack($("#track"),$("#trackCount"));
-  const pend=LIB.filter(x=>x.pending);
-  const pn=$("#pendNote");
-  if(pend.length){pn.hidden=false;pn.textContent="الأسماء المنقّطة نصوصها لم تُضَف بعد، ولن تظهر في الاختيار حتى تُضاف."}else pn.hidden=true;
   const sg=suggestions();
   $("#sugCard").hidden=!sg.length;
   $("#sugList").innerHTML=sg.map((x,i)=>`<div class="sug"><div><b>${x.it.title}</b><small>${x.why} · ${fmt(est(x.it))}</small></div><button data-sug="${x.it.id}">اقرأ</button></div>`).join("");
@@ -564,7 +534,6 @@ function finish(){
   const mins=Math.max(1,Math.round(S.elapsed/60));
   $("#endSub").textContent=`جلستك استغرقت نحو ${ar(mins)} دقيقة`;
   $("#endList").innerHTML=S.read.map(x=>`<li>${x.title}</li>`).join("");
-  renderTrack($("#track2"),$("#trackCount2"));
   S=null;show("end");
 }
 function leave(){ // خروج مبكر
