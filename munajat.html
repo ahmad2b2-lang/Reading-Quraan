@@ -370,29 +370,18 @@ function pick(arr){
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
 function buildPlan(M){
-  const mains=ready().filter(x=>x.cat==="main"), fillers=ready().filter(x=>x.cat==="filler");
-  let rem=M, plan=[], note="";
-  const minMain=mains.length?Math.min(...mains.map(est)):Infinity;
-  if(M>=minMain){
-    let pool=mains.slice(), n=0;
-    while(n<6){
-      const fit=pool.filter(x=>est(x)<=rem+1e-9);
-      if(!fit.length)break;
-      const p=pick(fit);plan.push(p);rem-=est(p);pool=pool.filter(x=>x!==p);n++;
-    }
-  }else{
-    note="وقتك أقل من أقصر مناجاة، فاخترنا لك أذكاراً قصيرة تناسبه.";
-  }
-  const fl=[];let fp=fillers.slice();
-  while(true){
-    const fit=fp.filter(x=>est(x)<=rem+1e-9);
-    if(!fit.length)break;
-    const p=pick(fit);fl.push(p);rem-=est(p);fp=fp.filter(x=>x!==p);
-  }
-  plan=plan.concat(shuffle(fl));
-  if(!plan.length){
+  // دعاء واحد فقط يمكن قراءته كاملاً ضمن الوقت المختار
+  const fits=x=>est(x)<=M+1e-9;
+  const mains=ready().filter(x=>x.cat==="main"&&fits(x));
+  const fillers=ready().filter(x=>x.cat!=="main"&&fits(x));
+  let note="", pool=mains;
+  if(!pool.length){pool=fillers;if(pool.length)note="وقتك أقل من أقصر مناجاة، فاخترنا لك نصاً قصيراً يناسبه.";}
+  else{const near=pool.filter(x=>est(x)>=M*0.5);if(near.length)pool=near;}
+  let plan=[];
+  if(pool.length)plan=[pick(pool)];
+  else{
     const s=ready().slice().sort((a,b)=>est(a)-est(b))[0];
-    if(s){plan.push(s);note="وقتك أقل من أقصر نص، فاخترنا لك أقصر ما لدينا.";}
+    if(s){plan=[s];note="وقتك أقل من أقصر نص، فاخترنا لك أقصر ما لدينا.";}
   }
   return {plan,note};
 }
@@ -527,7 +516,7 @@ $("#startBtn").addEventListener("click",()=>{
   const {plan,note}=buildPlan(M);
   if(!plan.length){$("#startNote").textContent="لا توجد نصوص جاهزة بعد.";return}
   const used=plan.reduce((a,x)=>a+est(x),0);
-  startSession(plan,Math.max(M,used),note);
+  startSession(plan,used,note);
 });
 $("#sugList").addEventListener("click",e=>{
   const b=e.target.closest("[data-sug]");if(!b)return;
