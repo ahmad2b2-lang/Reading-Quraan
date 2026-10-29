@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#f8f3e7">
+<title>وقت للدعاء</title>
+<style>
+:root{
+  color-scheme: only light;
+  --bg:#f8f3e7; --card:#fffdf8; --ink:#2a2823; --muted:#7b756a; --line:#e6dcc6;
+  --accent:#1d6b5a; --accent-d:#14503f; --gold:#b58a3c; --soft:#eaf3ee; --fs:28px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);min-height:100vh;
+  font-family:"Noto Sans Arabic","Segoe UI",Tahoma,system-ui,sans-serif;font-size:17px;line-height:1.7}
+button,input{font-family:inherit;color:inherit}
+.screen{max-width:640px;margin:0 auto;padding:22px 16px 48px}
+
+/* ---------- Home ---------- */
+.hero{text-align:center;padding:14px 0 6px}
+.orn{color:var(--gold);letter-spacing:8px;font-size:15px}
+.hero h1{margin:4px 0 2px;font-size:30px;color:var(--accent-d);font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif}
+.hero p{margin:0;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:16px}
+.card h3{margin:0 0 10px;font-size:17px;color:var(--accent-d)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 18px;font-size:18px;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.field{display:flex;align-items:center;gap:10px;margin-top:14px}
+.field label{color:var(--muted);white-space:nowrap}
+.field input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;font-size:20px;background:#fff;text-align:center}
+.btn{border:0;border-radius:16px;padding:15px 20px;font-size:19px;font-weight:700;cursor:pointer;width:100%}
+.btn.primary{background:var(--accent);color:#fff;margin-top:18px}
+.btn.primary:active{background:var(--accent-d)}
+.btn.primary[disabled]{background:#b9c9c2;cursor:default}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--accent-d)}
+.sug{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px dashed var(--line)}
+.sug:first-of-type{border-top:0}
+.sug b{display:block}
+.sug small{color:var(--muted)}
+.sug button{border:0;background:var(--soft);color:var(--accent-d);font-weight:700;border-radius:12px;padding:9px 16px;font-size:16px;cursor:pointer;white-space:nowrap}
+.track{display:flex;flex-wrap:wrap;gap:8px}
+.tk{font-size:14.5px;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:5px 10px;color:var(--muted)}
+.tk.ok{background:var(--soft);border-color:#b7d6c9;color:var(--accent-d)}
+.tk.pend{border-style:dashed;opacity:.6}
+.tk.ok::before{content:"✓ ";font-weight:700}
+.note{color:var(--muted);font-size:14px;margin:10px 0 0}
+.linkbtn{background:none;border:0;color:var(--accent-d);text-decoration:underline;font-size:15px;cursor:pointer;padding:8px 0}
+.center{text-align:center}
+
+/* ---------- Reading ---------- */
+.rhead{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.rbar{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:8px 12px}
+.ib{border:0;background:#fff;border:1px solid var(--line);border-radius:12px;min-width:44px;height:40px;font-size:18px;cursor:pointer}
+.rmid{text-align:center;font-size:14px;color:var(--muted);line-height:1.4}
+.rmid b{color:var(--ink);font-size:15px}
+.prog{height:3px;background:#eadfc7}
+.prog i{display:block;height:100%;width:0;background:var(--gold);transition:width .8s linear}
+.itemhead{text-align:center;padding:18px 0 4px}
+.kind{color:var(--gold);font-size:14px}
+.itemhead h2{margin:2px 0 4px;font-size:27px;color:var(--accent-d);font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif}
+.meta{color:var(--muted);font-size:14px}
+.text{padding:8px 2px 12px;font-family:"Amiri Quran","Amiri","Noto Naskh Arabic","Scheherazade New","Traditional Arabic","Geeza Pro","Droid Arabic Naskh",serif}
+.text p{font-size:var(--fs);line-height:2.15;margin:0 0 16px;text-align:justify}
+.text .quran div{font-size:var(--fs);line-height:2.2;margin-bottom:4px}
+.text .rubric{font-family:"Noto Sans Arabic","Segoe UI",Tahoma,sans-serif;font-size:15px;color:var(--gold);margin:6px 0 10px;text-align:center}
+.cnt{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;margin:14px 0 18px;text-align:center;font-family:"Noto Sans Arabic","Segoe UI",Tahoma,sans-serif}
+.cnt .lbl{font-size:15px;color:var(--muted);margin-bottom:8px}
+.cnt .badge{display:inline-block;font-size:12.5px;background:var(--soft);color:var(--accent-d);border-radius:8px;padding:0 8px;margin-inline-start:6px}
+.cnt .row{display:flex;align-items:center;justify-content:center;gap:18px}
+.ring{--p:0;width:128px;height:128px;border-radius:50%;border:0;position:relative;cursor:pointer;
+  background:conic-gradient(var(--accent) calc(var(--p)*1%),#e9e1cf 0)}
+.ring span{position:absolute;inset:9px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:var(--accent-d);line-height:1.2}
+.ring span small{font-size:14px;color:var(--muted);font-weight:400}
+.ring.full{background:var(--accent)}
+.ring.full span{background:var(--soft)}
+.undo{border:1px solid var(--line);background:#fff;border-radius:12px;width:42px;height:42px;font-size:22px;cursor:pointer}
+.rfoot{position:sticky;bottom:0;background:linear-gradient(to top,var(--bg) 70%,rgba(248,243,231,0));padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
+.rfoot .in{max-width:640px;margin:0 auto}
+.rfoot .btn{margin:0}
+.hint{color:var(--muted);font-size:14px;text-align:center;margin:0 0 8px}
+
+/* ---------- End ---------- */
+.endmark{font-size:44px;color:var(--gold);text-align:center;margin-top:20px}
+.end h2{text-align:center;margin:4px 0;font-size:28px;color:var(--accent-d);font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif}
+.end ul{list-style:none;margin:0;padding:0}
+.end li{padding:8px 0;border-top:1px dashed var(--line)}
+.end li:first-child{border-top:0}
+
+/* ---------- Sheet ---------- */
+.sheet{position:fixed;inset:0;background:rgba(40,35,25,.35);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet .box{background:var(--bg);width:100%;max-width:640px;border-radius:24px 24px 0 0;padding:18px 18px calc(22px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.sheet h3{margin:0 0 10px;color:var(--accent-d)}
+.sheet .sec{margin:16px 0}
+.sheet .sec>b{display:block;margin-bottom:8px}
+.sheet input[type=range]{width:100%;accent-color:var(--accent)}
+.prev{font-family:"Amiri Quran","Amiri","Noto Naskh Arabic","Traditional Arabic",serif;text-align:center;line-height:2;margin-top:6px}
+.danger{color:#9b3b2e}
+</style>
+</head>
+<body>
+
+<!-- ===== Home ===== -->
+<section id="home" class="screen">
+  <div class="hero">
+    <div class="orn">❖ ❖ ❖</div>
+    <h1>وقت للدعاء</h1>
+    <p>كم دقيقة لديك الآن؟</p>
+  </div>
+
+  <div class="card">
+    <div class="chips" id="chips"></div>
+    <div class="field">
+      <label for="mins">أو اكتب عدد الدقائق</label>
+      <input id="mins" type="number" inputmode="numeric" min="1" max="180" value="10">
+    </div>
+    <button class="btn primary" id="startBtn">ابدأ</button>
+    <p class="note center" id="startNote"></p>
+  </div>
+
+  <div class="card" id="sugCard" hidden>
+    <h3>مقترح الآن</h3>
+    <div id="sugList"></div>
+  </div>
+
+  <div class="card">
+    <h3>المناجاة الخمس عشرة <span id="trackCount" style="color:var(--muted);font-weight:400"></span></h3>
+    <div class="track" id="track"></div>
+    <p class="note" id="pendNote" hidden></p>
+  </div>
+
+  <div class="center"><button class="linkbtn" id="openSettings">الإعدادات</button></div>
+</section>
+
+<!-- ===== Reading ===== -->
+<section id="read" hidden>
+  <div class="rhead">
+    <div class="rbar">
+      <button class="ib" id="closeBtn" aria-label="إنهاء">✕</button>
+      <div class="rmid"><b id="posTxt"></b><br><span id="timeTxt"></span></div>
+      <button class="ib" id="fontBtn" aria-label="حجم الخط">Aa</button>
+    </div>
+    <div class="prog"><i id="progBar"></i></div>
+  </div>
+  <div class="screen" style="padding-top:4px;padding-bottom:12px" id="readBody"></div>
+  <div class="rfoot"><div class="in">
+    <p class="hint" id="nextHint" hidden></p>
+    <button class="btn primary" id="nextBtn">التالي</button>
+  </div></div>
+</section>
+
+<!-- ===== End ===== -->
+<section id="end" class="screen end" hidden>
+  <div class="endmark">❖</div>
+  <h2>تقبّل الله منك</h2>
+  <p class="center" style="color:var(--muted);margin:0" id="endSub"></p>
+  <div class="card"><h3>ما قرأته الآن</h3><ul id="endList"></ul></div>
+  <div class="card">
+    <h3>المناجاة الخمس عشرة <span id="trackCount2" style="color:var(--muted);font-weight:400"></span></h3>
+    <div class="track" id="track2"></div>
+  </div>
+  <button class="btn primary" id="homeBtn">العودة للرئيسية</button>
+</section>
+
+<!-- ===== Settings sheet ===== -->
+<div class="sheet" id="sheet" hidden>
+  <div class="box">
+    <h3>الإعدادات</h3>
+    <div class="sec">
+      <b>سرعة القراءة (لتقدير الوقت)</b>
+      <div class="chips" id="wpmChips"></div>
+    </div>
+    <div class="sec">
+      <b>حجم الخط</b>
+      <input type="range" id="fsRange" min="20" max="46" step="2">
+      <div class="prev" id="fsPrev" style="font-size:28px">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+    </div>
+    <div class="sec">
+      <button class="linkbtn danger" id="resetBtn">مسح سجل القراءة والتقدّم</button>
+    </div>
+    <button class="btn ghost" id="closeSheet">تم</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   مكتبة النصوص
+   - blocks: نص عادي = فقرة | {r:"..."} = تنبيه صغير | {c:100,label:"..."} = عدّاد اختياري داخل النص | {q:[...]} = آيات
+   - counter: عدّاد في نهاية العنصر  (required:true = لا يُكمَل إلا بعد الوصول للعدد)
+   - pending:true = النص لم يُضَف بعد (يُتجاهل في الاختيار العشوائي)
+   لإضافة نص ناقص: ضع الفقرات في blocks واحذف pending.
+   ===================================================================== */
+const LIB = [
+/* ---------- المناجاة الخمس عشرة (بحار الأنوار ج٩١ / مفاتيح الجنان) ---------- */
+{id:"mn01",grp:"munajat",num:1,cat:"main",title:"مناجاة التائبين",pending:true},
+{id:"mn02",grp:"munajat",num:2,cat:"main",title:"مناجاة الشاكين",blocks:[
+"إلهِي إلَيْكَ أَشْكُو نَفْساً بِالسُّوءِ أَمَّارَةً، وَإلَى الْخَطيئَةِ مُبادِرَةً، وَبِمَعاصِيكَ مُولَعَةً، وَلِسَخَطِكَ مُتَعَرِّضَةً، تَسْلُكُ بِي مَسالِكَ الْمَهالِكِ، وَتَجْعَلُنِي عِنْدَكَ أَهْوَنَ هالِك، كَثِيرَةَ الْعِلَلِ طَوِيلَةَ الأَمَلِ، إنْ مَسَّهَا الشَّرُّ تَجْزَعُ، وَإنْ مَسَّهَا الْخَيْرُ تَمْنَعُ، مَيَّالَةً إلَى اللَّعِبِ وَاللَّهْوِ، مَمْلُوَّةً بِالْغَفْلَةِ وَالسَّهُوِ، تُسْرِعُ بِي إلَى الْحَوْبَةِ، وَتُسَوِّفُنِي بِالتَّوْبَةِ.",
+"إلهِي أَشْكُو إلَيْكَ عَدُوّاً يُضِلُّنِي، وَشَيْطانَاً يَغْوِينِي، قَدْ مَلَأَ بِالْوَسْواسِ صَدْرِي، وَأَحاطَتْ هَواجِسُهُ بِقَلْبِي يُعاضِدُ لِيَ الْهَوى، وَيُزَيِّنُ لِي حُبَّ الدُّنْيَا، وَيَحُولُ بَيْنِي وَبَيْنَ الطَّاعَةِ وَالزُّلْفى.",
+"إلهِي إلَيْكَ أَشْكُو قَلْبَاً قاسِياً مَعَ الْوَسْواسِ مُتَقَلِّباً، وَبِالرَّيْنِ وَالطَّبْعِ مُتَلَبِّساً، وَعَيْنَاً عَنِ الْبُكآءِ مِنْ خَوْفِكَ جامِدَةً، وَإلى ما تَسُرُّها طامِحَةً.",
+"إلهِي لا حَوْلَ وَلا قُوَّةَ إلاَّ بِقُدْرَتِكَ، وَلا نَجاةَ لِي مِنْ مَكارِهِ الدُّنْيا إلاَّ بِعِصْمَتِكَ، فَأَسْأَلُكَ بِبَلاغَةِ حِكْمَتِكَ، وَنَفاذِ مَشِيَّتِكَ، أَنْ لا تَجْعَلَنِي لِغَيْرِ جُودِكَ مُتَعَرِّضاً، وَلا تُصَيِّرَنِي لِلْفِتَنِ غَرَضاً، وَكُنْ لِي عَلَى الأَعْداءِ ناصِرَاً، وَعَلَى الْمَخَازِي وَالْعُيُوبِ ساتِراً، وَمِنَ الْبَلاءِ واقِياً، وَعَنِ الْمَعاصِي عاصِمَاً، بِرَأْفَتِكَ وَرَحْمَتِكَ يا أَرْحَمَ الرَّاحِمِينَ."
+]},
+{id:"mn03",grp:"munajat",num:3,cat:"main",title:"مناجاة الخائفين",pending:true},
+{id:"mn04",grp:"munajat",num:4,cat:"main",title:"مناجاة الراجين",blocks:[
+"يا مَنْ إذا سَأَلَهُ عَبْدٌ أَعْطَاهُ، وَإذا أَمَّلَ ما عِنْدَهُ بَلَّغَهُ مُناهُ، وَإذا أَقْبَلَ عَلَيْهِ قَرَّبَهُ وَأَدْناهُ، وَإذا جاهَرَهُ بِالْعِصْيانِ سَتَرَ عَلَى ذَنْبِهِ وَغَطَّاهُ، وَإذا تَوَكَّلَ عَلَيْهِ أَحْسَبَهُ وَكَفَاهُ.",
+"إلهِي مَنِ الَّذِي نَزَلَ بِكَ مُلْتَمِساً قِراكَ فَما قَرَيْتَهُ؟ وَمَنِ الَّذِي أَناخَ بِبابِكَ مُرْتَجِياً نَداكَ فَما أَوْلَيْتَهُ؟ أَيَحْسُنُ أَنْ أَرْجِعَ عَنْ بابِكَ بِالْخَيْبَةِ مَصْرُوفاً، وَلَسْتُ أَعْرِفُ سِواكَ مَوْلىً بِالإِحْسانِ مَوْصُوفاً؟ كَيْفَ أَرْجُو غَيْرَكَ وَالْخَيْرُ كُلُّهُ بِيَدِكَ؟! وَكَيْفَ أُؤَمِّلُ سِوَاكَ وَالْخَلْقُ وَالأَمْرُ لَكَ؟! أَأَقْطَعُ رَجآئِي مِنْكَ وَقَدْ أَوْلَيْتَنِي ما لَمْ أَسْأَلْهُ مِنْ فَضْلِكَ؟! أَمْ تُفْقِرُنِي إلى مِثْلِي وَأَنَا أَعْتَصِمُ بِحَبْلِكَ؟! يا مَنْ سَعِدَ بِرَحْمَتِهِ الْقاصِدُونَ، وَلَمْ يَشْقَ بِنِقْمَتِهِ الْمُسْتَغْفِرُونَ، كَيْفَ أَنْسَاكَ وَلَمْ تَزَلْ ذاكِرِي؟! وَكَيْفَ أَلْهُو عَنْكَ وَأَنْتَ مُراقِبِي؟!",
+"إلهِي بِذَيْلِ كَرَمِكَ أَعْلَقتُ يَدِي، وَلِنَيْلِ عَطاياكَ بَسَطْتُ أَمَلِي، فَأَخْلِصْنِي بِخالِصَةِ تَوْحِيدِكَ، وَاجْعَلْنِي مِنْ صَفْوَةِ عَبِيدِك، يا مَنْ كُلُّ هارِب إلَيْهِ يَلْتَجِئُ، وَكُلُّ طالِب إيَّاهُ يَرْتَجِي، يا خَيْرَ مَرْجُوٍّ، وَيا أَكْرَمَ مَدْعُوٍّ، وَيا مَنْ لا يُرَدُّ سآئِلُهُ، وَلا يُخَيَّبُ آمِلُهُ، يا مَنْ بابُهُ مَفْتُوحٌ لِدَاعِيهِ، وَحِجابُهُ مَرْفُوعٌ لِراجِيهِ، أَسْأَلُكَ بِكَرَمِكَ أَنْ تَمُنَّ عَلَيَّ مِنْ عَطآئِكَ بِما تَقَرُّ بِهِ عَيْنِي، وَمِنْ رَجآئِكَ بِما تَطْمَئِنُّ بِهِ نَفْسِي، وَمِنَ الْيَقِينِ بِما تُهَوِّنُ بِهِ عَلَيَّ مُصِيباتِ الدُّنْيا، وَتَجْلُو بِهِ عَنْ بَصِيرَتِي غَشَواتِ الْعَمى بِرَحْمتِكَ يا أَرْحَمَ الرَّاحِمِينَ."
+]},
+{id:"mn05",grp:"munajat",num:5,cat:"main",title:"مناجاة الراغبين",pending:true},
+{id:"mn06",grp:"munajat",num:6,cat:"main",title:"مناجاة الشاكرين",blocks:[
+"إلهِي أَذْهَلَنِي عَنْ إقامَةِ شُكْرِكَ تَتابُعُ طَوْلِكَ، وَأَعْجَزَنِي عَنْ إحْصآءِ ثَنآئِكَ فَيْضُ فَضْلِكَ، وَشَغَلَنِي عَنْ ذِكْرِ مَحامِدِكَ تَرادُفُ عَوآئِدِكَ، وَأَعْيانِي عَنْ نَشْرِ عوارِفِكَ تَوالِي أَيدِيكَ، وَهذَا مَقامُ مَنِ اعْتَرَفَ بِسُبُوغِ النَّعْمآءِ، وَقابَلَها بِالتَّقْصِيرِ، وَشَهِدَ عَلى نَفْسِهِ بِالإهْمالِ وَالتَّضْيِيعِ، وَأَنْتَ الرَّؤُوفُ الرَّحِيمُ الْبَرُّ الْكَرِيمُ، الَّذِي لا يُخَيِّبُ قاصِدِيهِ، وَلا يَطْرُدُ عَنْ فِنآئِهِ آمِلِيهِ، بِساحَتِكَ تَحُطُّ رِحالُ الرَّاجِينَ، وَبِعَرْصَتِكَ تَقِفُ آمالُ الْمُسْتَرْفِدِينَ، فَلا تُقابِلْ آمالَنا بِالتَّخْيِيبِ وَالإياسِ، وَلا تُلْبِسْنا سِرْبالَ الْقُنُوطِ وَالإِبْلاسِ.",
+"إلهِي تَصاغَرَ عِنْدَ تَعاظُمِ آلائِكَ شُكْرِي، وَتَضَاءَلَ فِي جَنْبِ إكْرَامِكَ إيَّايَ ثَنآئِي وَنَشْرِي، جَلَّلَتْنِي نِعَمُكَ مِنْ أَنْوَارِ الإِيْمانِ حُلَلاً، وَضَرَبَتْ عَلَيَّ لَطآئِفُ بِرِّكَ مِنَ الْعِزِّ كِلَلاً، وَقَلَّدْتَنِي مِنْكَ قَلائِدَ لا تُحَلُّ، وَطَوَّقْتَنِي أَطْوَاقَاً لا تُفَلُّ، فَآلاؤُكَ جَمَّةٌ ضَعُفَ لِسانِي عَنْ إحْصائِها، وَنَعْمآؤُكَ كَثِيرَةٌ قَصُرَ فَهْمِي عَنْ إدْرَاكِها فَضْلاً عَنِ اسْتِقْصآئِها، فَكَيْفَ لِي بِتَحْصِيلِ الشُّكْرِ، وَشُكْرِي إيَّاكَ يَفْتَقِرُ إلى شُكْر، فَكُلَّما قُلْتُ: لَكَ الْحَمْدُ، وَجَبَ عَلَيَّ لِذلِكَ أَنْ أَقُولَ: لَكَ الْحَمْدُ.",
+"إلهِي فَكَما غَذَّيْتَنا بِلُطْفِكَ، وَرَبَّيْتَنا بِصُنْعِكَ، فَتَمِّمْ عَلَيْنَا سَوابِغَ النِّعَمِ، وَادْفَعْ عَنَّا مَكارِهَ النِّقَمِ، وَآتِنا مِنْ حُظُوظِ الدَّارَيْنِ أَرْفَعَهَا وَأَجَلَّها عاجِلاً وَآجِلاً، وَلَكَ الْحَمْدُ عَلى حُسْنِ بَلاَئِكَ وَسُبُوغِ نَعْمآئِكَ حَمْدَاً يُوافِقُ رِضاكَ، وَيَمْتَرِي الْعَظِيمَ مِنْ بِرِّكَ وَنَداكَ، يا عَظِيمُ يا كَرِيمُ، بِرَحْمَتِكَ يا أَرْحَمَ الرَّاحِمِينَ."
+]},
+{id:"mn07",grp:"munajat",num:7,cat:"main",title:"مناجاة المطيعين لله",blocks:[
+"أَللَّهُمَّ أَلْهِمْنا طاعَتَكَ، وَجَنِّبْنا مَعْصِيَتَكَ، وَيَسِّرْ لَنا بُلُوغَ ما نَتَمَنّى مِنِ ابْتِغآءِ رِضْوانِكَ، وَأَحْلِلْنا بُحْبُوحَةَ جِنانِكَ، وَاقْشَعْ عَنْ بَصائِرنا سَحابَ الارْتِيابِ، وَاكْشِفْ عَنْ قُلُوبِنا أَغْشِيَةَ الْمِرْيَةِ وَالْحِجابِ، وَأَزْهِقِ الْباطِلَ عَنْ ضَمآئِرِنا، وَأَثْبِتِ الْحَقَّ فِي سَرائِرِنا، فَإنَّ الشُّكُوكَ وَالظُّنُونَ لَواقِحُ الْفِتَنِ، وَمُكَدِّرَةٌ لِصَفْوِ الْمَنآئِحِ وَالْمِنَنِ.",
+"أَللَّهُمَّ احْمِلْنا فِي سُفُنِ نَجاتِكَ، وَمَتِّعْنا بِلَذِيْذِ مُناجاتِكَ، وَأَوْرِدْنا حِياضَ حُبِّكَ، وَأَذِقْنا حَلاوَةَ وُدِّكَ وَقُرْبِكَ، وَاجْعَلْ جِهادَنا فِيكَ، وَهَمَّنا فِي طاعَتِكَ، وَأَخْلِصْ نِيَّاتِنا فِي مُعامَلَتِكَ، فَإنَّا بِكَ وَلَكَ، وَلا وَسِيلَةَ لَنا إلَيْكَ إلاَّ أَنْتَ.",
+"إلهِي اجْعَلْنِي مِنَ الْمُصْطَفَيْنَ الأَخْيارِ، وَأَلْحِقْنِي بِالصَّالِحِينَ الأَبْرارِ، السَّابِقِينَ إلَى الْمَكْرُماتِ، الْمسارِعِينَ إلَى الْخَيْراتِ، الْعامِلِينَ لِلْباقِياتِ الصَّالِحاتِ، السَّاعِينَ إلى رَفِيعِ الدَّرَجاتِ، إنَّكَ عَلى كُلِّ شَيْء قَدِيرٌ، وَبِالإجابَةِ جَدِيرٌ بِرَحْمَتِكَ يا أَرْحَمَ الرَّاحِمِينَ."
+]},
+{id:"mn08",grp:"munajat",num:8,cat:"main",title:"مناجاة المريدين",pending:true},
+{id:"mn09",grp:"munajat",num:9,cat:"main",title:"مناجاة المحبين",pending:true},
+{id:"mn10",grp:"munajat",num:10,cat:"main",title:"مناجاة المتوسلين",blocks:[
+"إلهِي لَيْسَ لِي وَسِيلَةٌ إلَيْكَ إلاَّ عَواطِفُ رَأفَتِكَ، وَلا لِي ذَرِيعَةٌ إلَيْكَ إلاَّ عَوارِفُ رَحْمَتِكَ، وَشَفاعَةُ نَبِيِّكَ نَبِيِّ الرَّحْمَةِ، وَمُنْقِذِ الأُمَّةِ مِنَ الْغُمَّةِ، فَاجْعَلْهُما لِي سَبَباً إلى نَيْلِ غُفْرانِكَ، وَصَيِّرْهُمَا لِي وُصْلَةً إلَى الْفَوْزِ بِرِضْوانِكَ، وَقَدْ حَلَّ رَجآئِي بِحَرَمِ كَرَمِكَ، وَحَطَّ طَمَعِي بِفِنآءِ جُودِكَ. فَحَقِّقْ فِيكَ أَمَلِيْ وَاخْتِمْ بِالْخَيْرِ عَمَلِي، وَاجْعَلْنِي مِنْ صَفْوَتِكَ الَّذِينَ أَحْلَلْتَهُمْ بُحْبُوحَةَ جَنَّتِكَ، وَبَوَّأْتَهُمْ دارَ كَرامَتِكَ وَأَقْرَرْتَ أَعْيُنَهُمْ بِالنَّظَرِ إلَيْكَ يَوْمَ لِقآئِكَ، وَأَوْرَثْتَهُمْ مَنازِلَ الصِّدْقِ فِي جِوارِكَ.",
+"يا مَنْ لا يَفِدُ الْوافِدُونَ عَلى أَكْرَمَ مِنْهُ، وَلا يَجِدُ الْقاصِدُونَ أَرْحَمَ مِنْهُ، يا خَيْرَ مَنْ خَلا بِهِ وَحِيدٌ، وَيا أَعْطَفَ مَنْ أَوى إلَيْهِ طَرِيدٌ، إلى سَعَةِ عَفْوِكَ مَدَدْتُ يَدِي وَبِذَيْلِ كَرَمِكَ أَعْلَقْتُ كَفِّي، فَلا تُولِنِي الْحِرْمانَ، وَلا تُبْلِنِي بِالْخَيْبَةِ وَالْخُسْرانِ، يا سَمِيعَ الدُّعآءِ يا أَرْحَمَ الرَّاحِمِينَ."
+]},
+{id:"mn11",grp:"munajat",num:11,cat:"main",title:"مناجاة المفتقرين",pending:true},
+{id:"mn12",grp:"munajat",num:12,cat:"main",title:"مناجاة العارفين",pending:true},
+{id:"mn13",grp:"munajat",num:13,cat:"main",title:"مناجاة الذاكرين",pending:true},
+{id:"mn14",grp:"munajat",num:14,cat:"main",title:"مناجاة المعتصمين",pending:true},
+{id:"mn15",grp:"munajat",num:15,cat:"main",title:"مناجاة الزاهدين",blocks:[
+"إلهِي أَسْكَنْتَنا داراً حَفَرَتْ لَنا حُفَرَ مَكْرِها، وَعَلَّقَتْنا بِأَيْدِي الْمَنايا فِي حَبائِلِ غَدْرِها، فَإلَيْكَ نَلْتَجِئُ مِنْ مَكآئِدِ خُدَعِها، وَبِكَ نَعْتَصِمُ مِنَ الاغْتِرارِ بِزَخارِفِ زِيْنَتِهَا، فَإنَّهَا الْمُهْلِكَةُ طُلاَّبَهَا، الْمُتْلِفَةُ حُلاَّلَهَا، الْمَحْشُوَّةُ بِالآفاتِ، الْمَشْحُونَةُ بِالنَّكَباتِ.",
+"إلهِي فَزَهِّدْنا فِيها، وَسَلِّمْنا مِنْها بِتَوْفِيقِكَ وَعِصْمَتِكَ، وَانْزَعْ عَنَّا جَلابِيبَ مُخالَفَتِكَ، وَتَوَلَّ أُمُورَنا بِحُسْنِ كِفايَتِكَ، وَأَوْفِرْ مَزِيدَنا مِنْ سَعَةِ رَحْمَتِكَ، وَأَجْمِلْ صِلاتِنا مِنْ فَيْضِ مَواهِبِكَ، وَاغْرِسْ فِي أَفْئِدَتِنا أَشْجارَ مَحَبَّتِكَ، وَأَتْمِمْ لَنا أَنْوارَ مَعْرِفَتِكَ، وَأَذِقْنا حَلاوَةَ عَفْوِكَ، وَلَذَّةَ مَغْفِرَتِكَ، وَأَقْرِرْ أَعْيُنَنا يَوْمَ لِقآئِكَ بِرُؤْيَتِكَ، وَأَخْرِجْ حُبَّ الدُّنْيا مِنْ قُلُوبِنا كَما فَعَلْتَ بِالصَّالِحِينَ مِنْ صَفْوَتِكَ، وَالأَبْرارِ مِنْ خاصَّتِكَ بِرَحْمَتِكَ يا أَرْحَمَ الرَّاحِمِينَ، وَيا أَكْرَمَ الأَكْرَمِينَ."
+]},
+
+/* ---------- أدعية كبرى ---------- */
+{id:"kumayl",grp:"dua",cat:"main",title:"دعاء كميل",pending:true},
+{id:"sabah",grp:"dua",cat:"main",title:"دعاء الصباح",blocks:[
+"بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ",
+"اللهم يا من دَلَعَ لسان الصباح بِنُطْقِ تَبَلُّجِهِ، وسَرَّحَ قِطَعَ الليل المظلم بغياهب تلجلُجه، وأتقن صنع الفَلَك الدوّار في مقادير تبرُّجه، وشعشع ضياء الشمس بنور تأججه، يا من دل على ذاته بذاته، وتنزه عن مجانسة مخلوقاته، وجلّ عن ملاءمة كيفياته، يا من قَرُبَ من خطرات الظُنون، وبَعُدَ عن لحظات العيون، وعلم بما كان قبل أن يكون، يا من أرقدني في مِهَادِ أمنهِ وأمانه، وأيقظني إلى ما منحني به من مِنَنِهِ وإحسانه، وكَفَّ أكُفَّ السوءِ عني بيده وسلطانه.",
+"صلِّ اللهم على الدليل إليك في الليل الأليل، والماسك من أسبابك بحبل الشرف الأطول، والناصع الحَسَبِ في ذِروة الكاهل الأعبَل، والثابت القدم على زحاليفها في الزمن الأول، وعلى آله الأخيار المصطفين الأبرار، وافتح اللهم لنا مصاريع الصباح بمفاتيح الرحمة والفلاح، وألبسني اللهم من أفضل خلع الهداية والصلاح، واغرس اللهم بعظمتك في شِرْبِ جَناني ينابيعَ الخُشوع، وأجْرِ اللهم لهيبتك من أماقيَّ زفرات الدموع، وأدِّب اللهم نزَق الخُرْقِ مني بأزِمَّة القُنوع، إلهي إن لم تبتدئني الرحمة منك بحسن التوفيق، فمن السالك بي إليك في واضح الطريق؟ وإن أسلَمَتني أناتُك لقائد الأمل والمنى فمن المقيل عثراتي من كبوات الهوى؟ وإن خَذَلني نصرُك عند محاربة النفس والشيطان، فقد وكَلَني خُذلانُك إلى حيث النَّصَبُ والحرمان.",
+"إلهي أتراني ما أتيتك إلا من حيث الآمال، أم عَلِقْتُ بأطراف حبالك إلا حين باعَدَتني ذنوبي عن دار الوِصال، فبئس المطيةُ التي امْتَطَتْ نفسي من هواها، فواهاً لها لما سوَّلت لها ظنونها ومُناها، وتباً لها لجرأتها على سيدها ومولاها، إلهي قَرَعْتُ باب رحمتك بيد رجائي، وهربتُ إليك لاجئاً من فرط أهوائي، وعلَّقتُ بأطراف حبالك أنامل ولائي، فاصْفَح اللهم عما كنت أجرمته من زللي وخطائي، وأقلني من صَرعة ردائي، فإنك سيدي ومولاي ومعتمدي ورجائي، وأنت غاية مطلوبي ومناي في منقلبي ومثواي.",
+"إلهي كيف تطرد مسكيناً التجأ إليك من الذنوب هارباً، أم كيف تُخَيِّبُ مسترشداً قصد إلى جَنابك ساعياً، أم كيف ترد ظمآناً وَرَدَ إلى حياضك شارباً؟ كلا وحياضُك مُترعة في ضَنْك المُحُولِ، وبابك مفتوحٌ للطلب والوُغول، وأنت غاية السُّؤْل ونهاية المأمول، إلهي هذه أزِمَّةُ نفسي علّقتُها بِعقال مشيئتك، وهذه أعباء ذنوبي دَرَأْتُها بعفوك ورحمتك، وهذه أهوائي المُضِلّةُ وكَلْتُها إلى جَناب لطفك ورأفتك، فاجعل اللهم صباحي هذا نازلاً عليّ بضياء الهدى، وبالسلامة في الدين والدنيا، ومسائي جُنّةً من كيد العِدى ووقايةً من مُرديات الهوى، إنك قادر على ما تشاء، تُؤْتِي الملك من تشاء، وتنزع الملك ممن تشاء، وتعز من تشاء وتذل من تشاء، بيدك الخير إنك على كل شيء قدير، تُولج الليل في النهار وتُولج النهار في الليل، وتُخرج الحي من الميت، وتُخرج الميت من الحي، وترزق من تشاء بغير حساب.",
+"لا إله إلا أنت سبحانك اللهم وبحمدك، من ذا يعرف قدرك فلا يخافك، ومن ذا يعلم ما أنت فلا يهابك، ألّفت بقدرتك الفِرَق، وفَلَقْتَ بلطفك الفَلَقَ، وأَنَرْتَ بكرمِك دياجي الغسَق، وأنهرت المياه من الصُّمِّ الصياخيدِ عذباً وأُجَاجاً، وأنْزَلْتَ من المُعصرات مَاءً ثجّاجاً، وجعلت الشمس والقمر للبرية سراجاً وهّاجاً، من غير أن تُمَارِسَ فيما ابتدأت به لُغوباً ولا عِلاجاً، فيا من تَوَحَّد بالعزِّ والبقاء، وقَهَرَ عباده بالموت والفناء، صل اللهم على محمد وآله الأتقياء، واسمع ندائي، واستجب دعائي، وحقق بفضلك أملي ورجائي، يا خير من دُعِي لكشف الضر والمأمول في كل عسر ويسر، بك أنزلت حاجتي فلا تَرُدّنِي من سَنِيِّ مواهبك خائباً يا كريم يا كريم يا كريم، برحمتك يا أرحم الراحمين، وصلى الله على خير خلقه محمد وآله أجمعين.",
+{r:"ثم اسجد وقل:"},
+"إلهي قلبي مَحجُوب، ونفسي مَعْيُوب، وعقلي مَغْلُوب، وهوائي غالب، وطاعتي قليل، ومعصيتي كثير، ولساني مُقِرٌ بالذنوب، فكيف حيلتي يا ستَّار العُيوب، ويا عَلاَّم الغُيوب، ويا كاشف الكُروب، اغفر ذنوبي كُلَّهَا بحُرْمَةِ محمد وآل محمد، يا غفار يا غفار يا غفار برحمتك يا أرحم الراحمين."
+]},
+{id:"hujja",grp:"dua",cat:"filler",title:"دعاء الحجة بن الحسن (عجّل الله فرجه)",blocks:[
+"اللَّهُمَّ كُنْ لِوَلِيِّكَ الْحُجَّةِ بْنِ الْحَسَنِ، صَلَوَاتُكَ عَلَيْهِ وَعَلَى آبَائِهِ، فِي هَذِهِ السَّاعَةِ وَفِي كُلِّ سَاعَةٍ، وَلِيّاً وَحَافِظاً، وَقَائِداً وَنَاصِراً، وَدَلِيلاً وَعَيْناً، حَتَّى تُسْكِنَهُ أَرْضَكَ طَوْعاً، وَتُمَتِّعَهُ فِيهَا طَوِيلاً، بِرَحْمَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ."
+]},
+{id:"salawat",grp:"salawat",cat:"filler",title:"الصلاة على محمد وآل محمد",blocks:[
+"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَآلِ مُحَمَّدٍ"
+],counter:{target:3,required:true,label:"كرّر ثلاث مرات"}},
+
+/* ---------- الزيارات ---------- */
+{id:"ashura",grp:"ziyarah",cat:"main",title:"زيارة الإمام الحسين (ع) يوم عاشوراء",blocks:[
+"السَّلام عَلَيْكَ يَا أبَا عَبْدِ اللهِ ، السَّلام عَلَيْكَ يَا ابْنَ رَسُولِ اللهِ ، السَّلام عَلَيْكَ يَا ابْنَ أمِيرِ المُؤْمِنينَ ، وَابْنَ سَيِّدِ الوَصِيِّينَ ، السَّلام عَلَيْكَ يَا ابْنَ فاطِمَةَ الزّهراءِ سَيِّدَةِ نِساءِ العالَمِينَ ، السَّلام عَلَيْكَ يَا ثَارَ اللهِ وابْنَ ثارِهِ وَالْوِتْرَ المَوْتُورَ ، السَّلام عَلَيْكَ وَعَلَى الأرواحِ الّتي حَلّتْ بِفِنائِكَ ، وَأنَاخَتْ بِرحْلِك عَلَيْكُمْ مِنّي جَميعاً سَلامُ اللهِ أبَداً ما بَقِيتُ وَبَقِيَ الليْلُ وَالنَّهارُ.",
+"يَا أبَا عَبْدِ اللهِ ، لَقَدْ عَظُمَتِ الرَّزِيَّةُ ، وجَلّتْ وعَظُمَتْ المُصِيبَةُ بِكَ عَلَيْنا وَعَلَى جَمِيعِ أهْلِ الإسلام ، وَجَلَّتْ وَعَظُمَتْ مُصِيبَتُكَ فِي السَّمَوَاتِ عَلَى جَمِيعِ أهْلِ السَّمَوَاتِ ، فَلَعَنَ اللهُ اُمَّةً أسَّسَتْ أساسَ الظُّلْمِ وَالجَوْرِ عَلَيْكُمْ أهْلَ البَيْتِ ، وَلَعَنَ اللهُ اُمَّةً دَفَعَتْكُمْ عَنْ مَقامِكُمْ وَأزالَتْكُمْ عَنْ مَراتِبِكُمُ الّتِي رَتَّبَكُمُ اللهُ فِيها ، وَلَعَنَ اللهُ اُمَّةً قَتَلَتْكُمْ ، وَلَعَنَ اللهُ الْمُمَهِّدِينَ لَهُمْ بِالتَّمْكِينِ مِنْ قِتالِكُمْ ، بَرِئْتُ إلى اللهِ وَإلَيْكُمْ مِنْهُمْ وَمِنْ أشْياعِهِمْ وَأتْباعِهِمْ وَأوْلِيائِهِمْ.",
+"يَا أبَا عَبْدِ اللهِ ، إنِّي سِلْمٌ لِمَنْ سالَمَكُمْ ، وَحَرْبٌ لِمَنْ حارَبَكُمْ وَوَلِيٌّ لِمَنْ والاكُمْ وَعَدُوٌّ لِمَنْ عَاداكُمْ إلى يَوْمِ القِيامَةِ ، وَلَعَنَ اللهُ آلَ زِيَاد وَآلَ مَرْوانَ ، وَلَعَنَ اللهُ بَنِي اُمَيَّةَ قاطِبَةً ، وَلَعَنَ اللهُ ابْنَ مَرْجانَةَ ، وَلَعَنَ اللهُ عُمَرَ بْنَ سَعْد ، وَلَعَنَ اللهُ شِمْراً ، وَلَعَنَ اللهُ اُمَّةً أسْرَجَتْ وَألْجَمَتْ وَتَهيّأتْ وَتَنَقَّبَتْ لِقِتالِكَ ، بِأبِي أنْتَ وَاُمِّي لَقَدْ عَظُمَ مُصابِي بِكَ ، فَأسْألُ اللهَ الّذِي أكْرَمَ مَقامَكَ ، وَأكْرَمَنِي بِكَ ، أنْ يَرْزُقَني طَلَبَ ثارِكَ مَعَ إمام مَنْصُور مِنْ أهْلِ بَيْتِ مُحَمَّد صَلّى الله عَلَيْهِ وَآلِهِ.",
+"اللهمّ اجْعَلْني عِنْدَكَ وَجِيهاً بِالحُسَيْنِ عَلَيهِ السَّلام فِي الدُّنْيا وَالآخِرَةِ مِنَ المُقَرَّبِينَ.",
+"يَا أبَا عَبْدِ اللهِ ، إنِّي أتَقَرَّبُ إلى اللهِ تعالى ، وَإلَى رَسُولِهِ ، وَإلى أمِيرِ المُؤْمِنينَ ، وَإلَى فاطِمَةَ ، وإلى الحَسَنِ وَإلَيْكَ بِمُوالاتِكَ ، ومُوالاةِ أَوليائِك وَبِالْبَرَاءَةِ مِمَّنْ قَاتَلَكَ وَنَصبَ لَكَ الحَربَ ، وبالْبَرَاءةِ مِمَّنْ أسَّسَ أساسَ الظُّلْمِ وَالجَوْرِ عَلَيْكُمْ ، وَعلى أشياعِكُم وَأبْرَأُ إلى اللهِ وَإلى رَسُولِهِ وَبِالبراءِةِ مِمَّنْ أسَّسَ أساسَ ذلِكَ ، وَبَنى عَلَيْهِ بُنْيانَهُ ، وَجَرَى في ظُلْمِهِ وَجَوْرِهِ عَلَيْكُمْ وَعَلَى أشْياعِكُمْ ، بَرِئْتُ إلى اللهِ وَإلَيْكُمْ مِنْهُمْ ، وَأتَقَرَّبُ إلى اللهِ وَإلى رَسولِهِ ثُمَّ إلَيْكُمْ بِمُوالاتِكُم وَمُوالاةِ وَلِيِّكُمْ ، وَبِالْبَرَاءَةِ مِنْ أعْدائِكُمْ ،وَالنَّاصِبِينَ لَكُم الحَرْبَ ، وَبِالبَرَاءَةِ مِنْ أشْياعِهِمْ وَأتْباعِهِمْ ، يا أبا عَبدِ الله إنِّي سِلْمٌ لِمَنْ سالَمَكُمْ ، وَحَرْبٌ لِمَنْ حارَبَكُمْ ، وَوَلِيٌّ لِمَنْ والاكُمْ ، وَعَدُوٌّ لِمَنْ عاداكُمْ ، فَأسْألُ اللهَ الّذِي أكْرَمَني بِمَعْرِفَتِكُمْ ، وَمَعْرِفَةِ أوْلِيائِكُمْ ، وَرَزَقَني البَراءَةَ مِنْ أعْدائِكُمْ ، أنْ يَجْعَلَني مَعَكُمْ في الدُّنْيا وَالآخِرَةِ ، وَأنْ يُثَبِّتَ لي عِنْدَكُمْ قَدَمَ صِدْق في الدُّنْيا وَالآخِرَةِ ، وَأسْألُهُ أنْ يُبَلِّغَنِي الْمقامَ الْمَحْمُودَ لَكُمْ عِنْدَ اللهِ ، وَأنْ يَرْزُقَنِي طَلَبَ ثَارِي مَعَ إمَام مَهْدِيٍّ ظَاهِر نَاطِق بالحقِّ مِنْكُمْ ، وَأسْألُ اللهَ بِحَقِّكُمْ وَبِالشَّأنِ الَّذِي لَكُمْ عِنْدَهُ أنْ يُعْطِيَنِي بِمُصابِي بِكُمْ أفْضَلَ ما يُعْطِي مصاباً بِمُصِيبَتِهِ ، يا لَها منْ مُصِيبَة مَا أعْظَمَها وَأعْظَمَ رَزِيّتهَا فِي الإسلام وَفِي جَمِيعِ أهلِ السَّموَاتِ وَالارْضِ.",
+"اللهُمَّ اجْعَلْني في مَقامِي هذا مِمَّن تَنالُهُ مِنْكَ صَلَواتٌ وَرَحْمَةٌ وَمَغْفِرَةٌ . اللهُمَّ اجْعَلْ مَحْيايَ مَحْيا مُحَمَّد وَآلِ مُحَمَّد ، وَمَماتي مَماتَ مُحَمَّد وَآل مُحَمَّد.",
+"اللهُمَّ إنَّ هَذا يَوْمٌ تَبَرَّكَتْ بِهِ بَنُو اُمَيَّةَ وَابْنُ آكِلَةِ الاكْبادِ ، اللعِينُ بْنُ اللعِينِ عَلَى لِسانِكَ وَلِسانِ نَبِيِّكَ صَلّى الله عَلَيْهِ وَآلِهِ في كُلِّ مَوْطِن وَمَوْقِف وَقَفَ فِيهِ نَبيُّكَ - صَلّى الله عَلَيْهِ وَآلِهِ - . اللهُمَّ الْعَنْ أبَا سُفْيانَ وَمُعَاوِيَةَ وَيَزيدَ بْنَ مُعَاوِيَةَ وآلَ مَرْوَانَ عَلَيْهِمْ مِنْكَ اللعْنَةُ أبَدَ الآبِدِينَ ، وَهذا يَوْمٌ فَرِحَتْ بِهِ آلُ زِيَاد وَآلُ مَرْوانَ عَليهِمُ اللَّعْنةُ بِقَتْلِهِمُ الحُسَيْنَ عَلَيْهِ السَّلام ، اللهُمَّ فَضاعِفْ عَلَيْهِمُ اللعْنَ وَالعَذابَ الأليم.",
+"اللهُمَّ إنِّي أتَقَرَّبُ إلَيْكَ في هذَا اليَوْمِ ، وَفِي مَوْقِفِي هَذا ، وَأيَّامِ حَيَاتِي بِالبَرَاءَةِ مِنْهُمْ، وَاللعْنَةِ عَلَيْهِمْ ، وَبِالْمُوالاةِ لِنَبِيِّكَ وَآلِ نَبِيِّكَ عَلَيِه وعَلَيْهِمُ السَّلام.",
+{r:"ثمّ تقول:"},
+"اللهُمَّ الْعَنْ أوّلَ ظالِم ظَلَمَ حَقَّ مُحَمَّد وَآلِ مُحَمَّد ، وَآخِرَ تَابِع لَهُ عَلَى ذلِكَ ، اللهُمَّ الْعَنِ العِصابَةَ الَّتِي جاهَدَتِ الْحُسَيْنَ عَلَيْهِ السَّلام وَشايَعَتْ وَبايَعَتْ وَتابَعَتْ عَلَى قَتْلِهِ. اللهُمَّ الْعَنْهم جَميعاً.",
+{r:"(يقول ذلك مائة مرّة)"},
+{c:100,label:"التكرار مائة مرّة"},
+{r:"ثمّ تقول:"},
+"السَّلام عَلَيْكَ يَا أبا عَبْدِ اللهِ وَعلَى الأرواحِ الّتي حَلّتْ بِفِنائِكَ ، وَأنَاخَت برَحْلِك عَلَيْكَ مِنِّي سَلامُ اللهِ أبَداً مَا بَقِيتُ وَبَقِيَ الليْلُ وَالنَّهارُ ، وَلا جَعَلَهُ اللهُ آخِرَ العَهْدِ مِنِّي لِزِيَارَتِكُمْ ، أهْلَ البَيتِ السَّلام عَلَى الحُسَيْن ، وَعَلَى عَليِّ بْنِ الحُسَيْنِ ، وَعَلَى أوْلادِ الحُسَيْنِ ، وَعَلَى أصْحابِ الحُسَينِ الذينَ بَذَلُوا مُهَجَهُم دُونَ الحُسين.",
+{r:"(يقول ذلك مائة مرّة)"},
+{c:100,label:"التكرار مائة مرّة"},
+{r:"ثمّ تقول:"},
+"اللهمَّ خُصَّ أنْتَ أوّلَ ظالم بِاللّعْنِ مِنِّي ، وَابْدَأْ بِهِ أوّلاً ، ثُمَّ الثَّانِي ، وَالثَّالِثَ وَالرَّابِع ، اللهُمَّ الْعَنْ يزِيَدَ خامِساً ، وَالْعَنْ عُبَيْدَ اللهِ بْنَ زِيَاد وَابْنَ مَرْجانَةَ وَعُمَرَ بْنَ سَعْد وَشِمْراً وَآلَ أبي سُفْيانَ وَآلَ زِيَاد وآلَ مَرْوانَ إلَى يَوْمِ القِيامَةِ.",
+{r:"ثمّ تسجد وتقول:"},
+"اللهمَّ لَكَ الحَمْدُ حَمْدَ الشَّاكِرينَ لَكَ عَلَى مُصابِهِمْ ، الحَمْدُ للهِ عَلَى عَظِيمِ رَزِيّتي. اللهُمَّ ارْزُقْني شَفاعَةَ الحُسَيْن عَلَيهِ السَّلام يَوْمَ الوُرُودِ ، وَثَبِّتْ لي قَدَمَ صِدْق عِنْدَكَ مَعَ الحُسَيْنِ وَأصْحابِ الحُسَيْن الّذِينَ بَذَلُوا مُهَجَهُمْ دُونَ الْحُسَيْن عَلَيْهِ السَّلام."
+]},
+{id:"jamia",grp:"ziyarah",cat:"filler",title:"زيارة أهل البيت (ع) القصيرة",pending:true},
+
+/* ---------- سور قصيرة (اختياري: ٣ مرات) ---------- */
+{id:"s001",grp:"quran",cat:"filler",title:"سورة الفاتحة",blocks:[{q:[
+"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ﴿١﴾",
+"ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ ﴿٢﴾",
+"ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ﴿٣﴾",
+"مَٰلِكِ يَوْمِ ٱلدِّينِ ﴿٤﴾",
+"إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ﴿٥﴾",
+"ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ ﴿٦﴾",
+"صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ ﴿٧﴾"
+]}],counter:{target:3,label:"عدد القراءات"}},
+{id:"s112",grp:"quran",cat:"filler",title:"سورة الإخلاص",blocks:[{q:[
+"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+"قُلْ هُوَ ٱللَّهُ أَحَدٌ ﴿١﴾",
+"ٱللَّهُ ٱلصَّمَدُ ﴿٢﴾",
+"لَمْ يَلِدْ وَلَمْ يُولَدْ ﴿٣﴾",
+"وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ ﴿٤﴾"
+]}],counter:{target:3,label:"عدد القراءات"}},
+{id:"s113",grp:"quran",cat:"filler",title:"سورة الفلق",blocks:[{q:[
+"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+"قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ ﴿١﴾",
+"مِن شَرِّ مَا خَلَقَ ﴿٢﴾",
+"وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ﴿٣﴾",
+"وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ ﴿٤﴾",
+"وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴿٥﴾"
+]}],counter:{target:3,label:"عدد القراءات"}},
+{id:"s114",grp:"quran",cat:"filler",title:"سورة الناس",blocks:[{q:[
+"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+"قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ ﴿١﴾",
+"مَلِكِ ٱلنَّاسِ ﴿٢﴾",
+"إِلَٰهِ ٱلنَّاسِ ﴿٣﴾",
+"مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ ﴿٤﴾",
+"ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ ﴿٥﴾",
+"مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ ﴿٦﴾"
+]}],counter:{target:3,label:"عدد القراءات"}},
+{id:"s097",grp:"quran",cat:"filler",title:"سورة القدر",blocks:[{q:[
+"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+"إِنَّآ أَنزَلْنَٰهُ فِى لَيْلَةِ ٱلْقَدْرِ ﴿١﴾",
+"وَمَآ أَدْرَىٰكَ مَا لَيْلَةُ ٱلْقَدْرِ ﴿٢﴾",
+"لَيْلَةُ ٱلْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ ﴿٣﴾",
+"تَنَزَّلُ ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ ﴿٤﴾",
+"سَلَٰمٌ هِىَ حَتَّىٰ مَطْلَعِ ٱلْفَجْرِ ﴿٥﴾"
+]}],counter:{target:3,label:"عدد القراءات"}},
+{id:"s103",grp:"quran",cat:"filler",title:"سورة العصر",blocks:[{q:[
+"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+"وَٱلْعَصْرِ ﴿١﴾",
+"إِنَّ ٱلْإِنسَٰنَ لَفِى خُسْرٍ ﴿٢﴾",
+"إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ ﴿٣﴾"
+]}],counter:{target:3,label:"عدد القراءات"}}
+];
+
+const KIND={munajat:"مناجاة",dua:"دعاء",ziyarah:"زيارة",quran:"قرآن كريم",salawat:"صلاة على النبي وآله"};
+
+/* ======================= أدوات ======================= */
+const $=s=>document.querySelector(s);
+const ar=n=>String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+const MEM={};
+const store=(()=>{try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return localStorage}catch(e){return {getItem:k=>(k in MEM?MEM[k]:null),setItem:(k,v)=>{MEM[k]=String(v)}}}})();
+const load=(k,d)=>{try{const v=store.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}};
+const save=(k,v)=>{try{store.setItem(k,JSON.stringify(v))}catch(e){}};
+
+let cfg=Object.assign({wpm:110,fs:28},load("mr_cfg",{}));
+let hist=load("mr_hist",{});   // آخر قراءة لكل عنصر
+let done=load("mr_done",{});   // عدد مرات إتمام كل عنصر
+const saveCfg=()=>save("mr_cfg",cfg);
+
+const AR_RE=/[\u0621-\u064A\u0671-\u06D3]/;
+function wordsOf(it){
+  let n=0;
+  const add=t=>{n+=t.split(/\s+/).filter(w=>AR_RE.test(w)).length};
+  (it.blocks||[]).forEach(b=>{ if(typeof b==="string")add(b); else if(b.q)b.q.forEach(add); });
+  return n;
+}
+function est(it){ // بالدقائق — قراءة واحدة (والصلاة على النبي ×٣ لأنها إلزامية)
+  const rep=(it.counter&&it.counter.required)?it.counter.target:1;
+  return wordsOf(it)*rep/cfg.wpm;
+}
+const fmt=m=>m<1?"أقل من دقيقة":"≈ "+ar(Math.round(m))+" د";
+const byId=id=>LIB.find(x=>x.id===id);
+const ready=()=>LIB.filter(x=>!x.pending);
+
+/* ======================= الاختيار ======================= */
+function weight(it){const t=hist[it.id];return t?1+Math.min(60,(Date.now()-t)/864e5):61}
+function pick(arr){
+  const w=arr.map(weight),sum=w.reduce((a,b)=>a+b,0);let r=Math.random()*sum;
+  for(let i=0;i<arr.length;i++){r-=w[i];if(r<=0)return arr[i]}
+  return arr[arr.length-1];
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function buildPlan(M){
+  const mains=ready().filter(x=>x.cat==="main"), fillers=ready().filter(x=>x.cat==="filler");
+  let rem=M, plan=[], note="";
+  const minMain=mains.length?Math.min(...mains.map(est)):Infinity;
+  if(M>=minMain){
+    let pool=mains.slice(), n=0;
+    while(n<6){
+      const fit=pool.filter(x=>est(x)<=rem+1e-9);
+      if(!fit.length)break;
+      const p=pick(fit);plan.push(p);rem-=est(p);pool=pool.filter(x=>x!==p);n++;
+    }
+  }else{
+    note="وقتك أقل من أقصر مناجاة، فاخترنا لك أذكاراً قصيرة تناسبه.";
+  }
+  const fl=[];let fp=fillers.slice();
+  while(true){
+    const fit=fp.filter(x=>est(x)<=rem+1e-9);
+    if(!fit.length)break;
+    const p=pick(fit);fl.push(p);rem-=est(p);fp=fp.filter(x=>x!==p);
+  }
+  plan=plan.concat(shuffle(fl));
+  if(!plan.length){
+    const s=ready().slice().sort((a,b)=>est(a)-est(b))[0];
+    if(s){plan.push(s);note="وقتك أقل من أقصر نص، فاخترنا لك أقصر ما لدينا.";}
+  }
+  return {plan,note};
+}
+
+/* ======================= اقتراحات ======================= */
+function hijri(){
+  try{
+    const p=new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn",{day:"numeric",month:"numeric"}).formatToParts(new Date());
+    const g=t=>+p.find(x=>x.type===t).value;return {d:g("day"),m:g("month")};
+  }catch(e){return null}
+}
+function suggestions(){
+  const d=new Date(),dow=d.getDay(),h=d.getHours(),s=[],H=hijri();
+  if(H&&H.m===1&&H.d===10)s.push(["ashura","اليوم عاشوراء (قد يختلف يوماً بحسب الرؤية)"]);
+  if((dow===4&&h>=16)||(dow===5&&h<6))s.push(["kumayl","ليلة الجمعة"]);
+  if(h>=4&&h<11)s.push(["sabah","وقت الصباح"]);
+  return s.map(([id,why])=>({it:byId(id),why})).filter(x=>x.it&&!x.it.pending);
+}
+
+/* ======================= الشاشات ======================= */
+const screens=["home","read","end"];
+function show(n){screens.forEach(s=>{$("#"+s).hidden=s!==n});window.scrollTo(0,0)}
+
+function renderTrack(box,cnt){
+  const m=LIB.filter(x=>x.grp==="munajat").sort((a,b)=>a.num-b.num);
+  box.innerHTML=m.map(x=>`<span class="tk${done[x.id]?" ok":""}${x.pending?" pend":""}">${x.title.replace("مناجاة ","")}</span>`).join("");
+  const c=m.filter(x=>done[x.id]).length;
+  cnt.textContent=`(${ar(c)} من ${ar(m.length)})`;
+}
+function renderHome(){
+  renderTrack($("#track"),$("#trackCount"));
+  const pend=LIB.filter(x=>x.pending);
+  const pn=$("#pendNote");
+  if(pend.length){pn.hidden=false;pn.textContent="الأسماء المنقّطة نصوصها لم تُضَف بعد، ولن تظهر في الاختيار حتى تُضاف."}else pn.hidden=true;
+  const sg=suggestions();
+  $("#sugCard").hidden=!sg.length;
+  $("#sugList").innerHTML=sg.map((x,i)=>`<div class="sug"><div><b>${x.it.title}</b><small>${x.why} · ${fmt(est(x.it))}</small></div><button data-sug="${x.it.id}">اقرأ</button></div>`).join("");
+}
+
+/* ---------- جلسة القراءة ---------- */
+let S=null,tick=null,wake=null;
+function startSession(plan,planned,note){
+  S={plan,i:0,planned:Math.max(1,planned),elapsed:0,cnt:{},read:[],note};
+  history.pushState({r:1},"");
+  show("read");renderReading();
+  clearInterval(tick);
+  tick=setInterval(()=>{ if(document.visibilityState==="visible"&&S){S.elapsed++;updTime()} },1000);
+  try{ if(navigator.wakeLock)navigator.wakeLock.request("screen").then(w=>wake=w).catch(()=>{}) }catch(e){}
+}
+function endTimer(){clearInterval(tick);tick=null;try{wake&&wake.release()}catch(e){}wake=null}
+function updTime(){
+  if(!S)return;
+  const e=Math.floor(S.elapsed/60),p=Math.round(S.planned);
+  $("#timeTxt").textContent=`مضى ${ar(e)} من ${ar(p)} د`;
+  $("#progBar").style.width=Math.min(100,S.elapsed/(S.planned*60)*100)+"%";
+}
+function cntHTML(key,target,label,optional){
+  const v=S.cnt[key]||0,p=Math.min(100,v/target*100),full=v>=target;
+  return `<div class="cnt" data-box="${key}">
+    <div class="lbl">${label}${optional?'<span class="badge">اختياري</span>':''}</div>
+    <div class="row">
+      <button class="ring${full?" full":""}" style="--p:${p}" data-ck="${key}" data-t="${target}" aria-label="عدّ"><span>${ar(v)}<small>من ${ar(target)}</small></span></button>
+      <button class="undo" data-un="${key}" data-t="${target}" aria-label="تراجع">−</button>
+    </div></div>`;
+}
+function itemHTML(it){
+  let h=`<div class="itemhead"><div class="kind">${KIND[it.grp]||""}</div><h2>${it.title}</h2><div class="meta">${fmt(est(it))}</div></div><div class="text">`;
+  it.blocks.forEach((b,i)=>{
+    if(typeof b==="string")h+=`<p>${b}</p>`;
+    else if(b.r)h+=`<div class="rubric">${b.r}</div>`;
+    else if(b.q)h+=`<div class="quran">${b.q.map(l=>`<div>${l}</div>`).join("")}</div>`;
+    else if(b.c)h+=cntHTML(it.id+":"+i,b.c,b.label,true);
+  });
+  h+="</div>";
+  if(it.counter)h+=cntHTML(it.id+":end",it.counter.target,it.counter.label,!it.counter.required);
+  return h;
+}
+function needCount(it){
+  if(!(it.counter&&it.counter.required))return false;
+  return (S.cnt[it.id+":end"]||0)<it.counter.target;
+}
+function updNext(){
+  const it=S.plan[S.i],lock=needCount(it),last=S.i===S.plan.length-1;
+  const b=$("#nextBtn");b.disabled=lock;b.textContent=last?"إنهاء":"التالي";
+  const h=$("#nextHint");h.hidden=!lock;if(lock)h.textContent="اضغط الدائرة حتى تكتمل المرّات الثلاث";
+}
+function renderReading(){
+  const it=S.plan[S.i];
+  $("#posTxt").textContent=`${ar(S.i+1)} / ${ar(S.plan.length)}`;
+  let h=(S.i===0&&S.note)?`<p class="note center">${S.note}</p>`:"";
+  $("#readBody").innerHTML=h+itemHTML(it);
+  updTime();updNext();window.scrollTo(0,0);
+}
+function markDone(it){
+  done[it.id]=(done[it.id]||0)+1;hist[it.id]=Date.now();save("mr_done",done);save("mr_hist",hist);
+  S.read.push(it);
+}
+function next(){
+  const it=S.plan[S.i];if(needCount(it))return;
+  markDone(it);
+  if(S.i<S.plan.length-1){S.i++;renderReading()}else finish();
+}
+function finish(){
+  endTimer();
+  const mins=Math.max(1,Math.round(S.elapsed/60));
+  $("#endSub").textContent=`جلستك استغرقت نحو ${ar(mins)} دقيقة`;
+  $("#endList").innerHTML=S.read.map(x=>`<li>${x.title}</li>`).join("");
+  renderTrack($("#track2"),$("#trackCount2"));
+  S=null;show("end");
+}
+function leave(){ // خروج مبكر
+  if(!S)return;
+  if(S.read.length&&!confirm("إنهاء الجلسة الآن؟"))return;
+  if(!S.read.length&&false)return;
+  endTimer();S=null;renderHome();show("home");
+}
+
+/* ======================= أحداث ======================= */
+const CHIPS=[3,5,10,15,20];
+function setMins(v){
+  $("#mins").value=v;
+  document.querySelectorAll("#chips .chip").forEach(c=>c.classList.toggle("on",+c.dataset.m===+v));
+}
+$("#chips").innerHTML=CHIPS.map(m=>`<button class="chip" data-m="${m}">${ar(m)}</button>`).join("");
+$("#chips").addEventListener("click",e=>{const c=e.target.closest(".chip");if(c)setMins(c.dataset.m)});
+$("#mins").addEventListener("input",e=>setMins(e.target.value));
+
+$("#startBtn").addEventListener("click",()=>{
+  let M=parseInt($("#mins").value,10);
+  if(!(M>=1)){$("#startNote").textContent="اكتب عدد الدقائق (١ فأكثر).";return}
+  M=Math.min(M,180);$("#startNote").textContent="";
+  const {plan,note}=buildPlan(M);
+  if(!plan.length){$("#startNote").textContent="لا توجد نصوص جاهزة بعد.";return}
+  const used=plan.reduce((a,x)=>a+est(x),0);
+  startSession(plan,Math.max(M,used),note);
+});
+$("#sugList").addEventListener("click",e=>{
+  const b=e.target.closest("[data-sug]");if(!b)return;
+  const it=byId(b.dataset.sug);startSession([it],est(it),"");
+});
+$("#nextBtn").addEventListener("click",next);
+$("#closeBtn").addEventListener("click",leave);
+$("#homeBtn").addEventListener("click",()=>{renderHome();show("home")});
+window.addEventListener("popstate",()=>{ if(S){endTimer();S=null;renderHome();show("home")} });
+
+$("#readBody").addEventListener("click",e=>{
+  const r=e.target.closest(".ring"),u=e.target.closest(".undo");
+  if(!r&&!u)return;
+  const key=(r||u).dataset[r?"ck":"un"],t=+(r||u).dataset.t;
+  let v=S.cnt[key]||0;
+  v=r?Math.min(t,v+1):Math.max(0,v-1);
+  S.cnt[key]=v;
+  if(r&&navigator.vibrate)try{navigator.vibrate(12)}catch(_){}
+  const box=(r||u).closest(".cnt"),it=S.plan[S.i];
+  const label=box.querySelector(".lbl").cloneNode(true);
+  const opt=!!box.querySelector(".badge");
+  const lbl=label.childNodes[0].textContent;
+  box.outerHTML=cntHTML(key,t,lbl,opt);
+  updNext();
+});
+
+/* ---------- الإعدادات ---------- */
+const WPM=[["بطيء",80],["متوسط",110],["سريع",140]];
+function renderCfg(){
+  $("#wpmChips").innerHTML=WPM.map(([n,v])=>`<button class="chip${cfg.wpm===v?" on":""}" data-w="${v}">${n}</button>`).join("");
+  $("#fsRange").value=cfg.fs;$("#fsPrev").style.fontSize=cfg.fs+"px";
+  document.documentElement.style.setProperty("--fs",cfg.fs+"px");
+}
+$("#wpmChips").addEventListener("click",e=>{const c=e.target.closest("[data-w]");if(!c)return;cfg.wpm=+c.dataset.w;saveCfg();renderCfg();renderHome()});
+$("#fsRange").addEventListener("input",e=>{cfg.fs=+e.target.value;saveCfg();renderCfg()});
+$("#openSettings").addEventListener("click",()=>{$("#sheet").hidden=false});
+$("#fontBtn").addEventListener("click",()=>{$("#sheet").hidden=false});
+$("#closeSheet").addEventListener("click",()=>{$("#sheet").hidden=true;if(S)updTime()});
+$("#sheet").addEventListener("click",e=>{if(e.target.id==="sheet")$("#sheet").hidden=true});
+$("#resetBtn").addEventListener("click",()=>{
+  if(confirm("مسح سجل القراءة والتقدّم؟")){hist={};done={};save("mr_hist",hist);save("mr_done",done);renderHome()}
+});
+
+/* ---------- بدء ---------- */
+renderCfg();setMins(10);renderHome();
+</script>
+</body>
+</html>
