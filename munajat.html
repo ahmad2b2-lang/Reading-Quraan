@@ -383,7 +383,9 @@ const save=(k,v)=>{try{store.setItem(k,JSON.stringify(v))}catch(e){}};
 
 let cfg=Object.assign({wpm:110,fs:28},load("mr_cfg",{}));cfg.wpm=110; // سرعة ثابتة (متوسطة)
 let hist=load("mr_hist",{});   // آخر قراءة لكل عنصر
-let done=load("mr_done",{});   // عدد مرات إتمام كل عنصر
+let done=load("mr_done",{});   // تاريخ آخر إتمام لكل عنصر (يُحتسب منجزاً حتى منتصف الليل فقط)
+const todayKey=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
+const isDone=id=>done[id]===todayKey();
 const saveCfg=()=>save("mr_cfg",cfg);
 
 const AR_RE=/[\u0621-\u064A\u0671-\u06D3]/;
@@ -442,14 +444,20 @@ function suggestions(){
   return s.map(([id,why])=>({it:byId(id),why})).filter(x=>x.it&&!x.it.pending);
 }
 
+/* إعادة ضبط علامات الإنجاز عند منتصف الليل */
+let _day=todayKey();
+function dayCheck(){if(todayKey()!==_day){_day=todayKey();if(!$("#home").hidden)renderHome()}}
+setInterval(dayCheck,30000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)dayCheck()});
+
 /* ======================= الشاشات ======================= */
 const screens=["home","read","end"];
 function show(n){screens.forEach(s=>{$("#"+s).hidden=s!==n});window.scrollTo(0,0)}
 
 function renderTrack(box,cnt){
   const m=LIB.filter(x=>x.grp==="munajat").sort((a,b)=>a.num-b.num);
-  box.innerHTML=m.map(x=>`<span class="tk${done[x.id]?" ok":""}${x.pending?" pend":""}">${x.title.replace("مناجاة ","")}</span>`).join("");
-  const c=m.filter(x=>done[x.id]).length;
+  box.innerHTML=m.map(x=>`<span class="tk${isDone(x.id)?" ok":""}${x.pending?" pend":""}">${x.title.replace("مناجاة ","")}</span>`).join("");
+  const c=m.filter(x=>isDone(x.id)).length;
   cnt.textContent=`(${ar(c)} من ${ar(m.length)})`;
 }
 function renderHome(){
@@ -517,7 +525,7 @@ function renderReading(){
   updTime();updNext();window.scrollTo(0,0);
 }
 function markDone(it){
-  done[it.id]=(done[it.id]||0)+1;hist[it.id]=Date.now();save("mr_done",done);save("mr_hist",hist);
+  done[it.id]=todayKey();hist[it.id]=Date.now();save("mr_done",done);save("mr_hist",hist);
   S.read.push(it);
 }
 function next(){
