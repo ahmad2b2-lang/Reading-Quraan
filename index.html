@@ -178,6 +178,16 @@
   .stat b { display: block; font-size: 24px; color: var(--gold); }
   .stat span { font-size: 14px; color: var(--muted); }
   .note { text-align: center; color: var(--muted); font-size: 15px; margin: 14px 0 0; }
+  .advanced-btn { display: block; margin: 18px auto 24px; font-size: 15px; color: var(--muted); }
+  .adv-field { text-align: start; margin-bottom: 10px; }
+  .adv-field input { text-align: center; font-size: 26px; font-weight: 700; letter-spacing: 2px; direction: ltr; padding: 10px; }
+  .adv-preview {
+    min-height: 74px; margin-bottom: 16px; padding: 10px 12px; border-radius: 12px;
+    background: var(--green-soft); color: var(--green-dark); font-size: 15px; line-height: 1.7;
+  }
+  .adv-preview:empty { background: transparent; }
+  .adv-preview .s { font-family: "KFGQPC Hafs", serif; font-size: 20px; }
+  .adv-preview.err { background: #f6e3df; color: var(--danger); }
 
   /* ---------- Popup ---------- */
   .overlay {
@@ -335,6 +345,7 @@
     </div>
     <button class="btn" id="start" type="button">ابدأ جلسة قراءة</button>
     <p class="note" id="h-note" hidden></p>
+    <button class="link advanced-btn" id="advanced" type="button">متقدم</button>
   </div>
 </section>
 
@@ -386,6 +397,21 @@
     <div class="chips" id="pp-chips"></div>
     <button class="btn" id="pp-go" type="button">ابدأ القراءة</button>
     <button class="link" id="pp-cancel" type="button">ليس الآن</button>
+  </div>
+</div>
+
+<!-- Advanced: mark pages read outside the app -->
+<div class="overlay" id="adv" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="adv-title">
+    <h2 id="adv-title">قرأتُ صفحات خارج التطبيق</h2>
+    <p id="adv-sub"></p>
+    <div class="field adv-field">
+      <label for="adv-page">آخر صفحة أتممتها</label>
+      <input id="adv-page" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" enterkeyhint="done">
+    </div>
+    <div class="adv-preview" id="adv-preview" aria-live="polite"></div>
+    <button class="btn" id="adv-save" type="button" disabled>تحديث تقدّمي</button>
+    <button class="link" id="adv-cancel" type="button">إلغاء</button>
   </div>
 </div>
 
@@ -635,6 +661,67 @@
     session = { goal: ppCount, done: 0 };
     show("s-reader");
     renderReader();
+  };
+
+  // ---------- Advanced: mark pages read outside the app ----------
+  let advTarget = null, advSeq = 0, advBusy = false;
+  const toLatin = (s) => s.replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+  function advMessage(html, err) {
+    const p = $("adv-preview");
+    p.classList.toggle("err", !!err);
+    p.innerHTML = html;
+  }
+  async function advUpdate() {
+    const seq = ++advSeq;
+    const raw = toLatin($("adv-page").value).replace(/\D/g, "");
+    if ($("adv-page").value !== raw) $("adv-page").value = raw;
+    advTarget = null; $("adv-save").disabled = true;
+    const from = reader.current_page;
+    if (!raw) { advMessage(""); return; }
+    const n = +raw;
+    if (n < 1 || n > TOTAL_PAGES) { advMessage(`أدخل رقم صفحة من ١ إلى ${ar(TOTAL_PAGES)}`, true); return; }
+    if (n < from) { advMessage(`تقدّمك الحالي عند الصفحة ${ar(from)} بالفعل. أدخل الصفحة ${ar(from)} أو ما بعدها.`, true); return; }
+    let d;
+    try { d = await loadPage(n); } catch { if (seq === advSeq) advMessage("تعذّر التحميل، تحقق من الاتصال", true); return; }
+    if (seq !== advSeq) return;
+    const count = n - from + 1;
+    const countWord = count === 1 ? "صفحة واحدة" : count === 2 ? "صفحتان" : `${ar(count)} صفحة`;
+    const where = `<span class="s">سورة ${d.surahs[d.surahs.length - 1]}</span>، الجزء ${ar(d.juz)}`;
+    const after = n >= TOTAL_PAGES
+      ? "وبذلك تُتمّ ختمة، وتبدأ قراءتك التالية من الفاتحة."
+      : `وتبدأ قراءتك التالية من الصفحة ${ar(n + 1)}.`;
+    advMessage(`الصفحة ${ar(n)}: ${where}<br>سيُسجَّل من ${ar(from)} إلى ${ar(n)} (${countWord}) كمقروء، ${after}`);
+    advTarget = n; $("adv-save").disabled = false;
+  }
+  function openAdvanced() {
+    $("adv-sub").textContent = `حدّد آخر صفحة أتممتها، وسيتقدّم وِردك إلى ما بعدها. تقدّمك الحالي: الصفحة ${ar(reader.current_page)}.`;
+    $("adv-page").value = ""; advMessage(""); advTarget = null; $("adv-save").disabled = true;
+    $("adv").hidden = false;
+    setTimeout(() => $("adv-page").focus(), 50);
+  }
+  $("advanced").onclick = openAdvanced;
+  $("adv-cancel").onclick = () => ($("adv").hidden = true);
+  $("adv-page").addEventListener("input", advUpdate);
+  $("adv-page").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); $("adv-page").blur(); } });
+  $("adv-save").onclick = async () => {
+    if (advBusy || advTarget === null) return;
+    advBusy = true; $("adv-save").disabled = true;
+    const before = reader.khatmas;
+    try {
+      const { data, error } = await sb.rpc("quran_mark_read_through", { p_from: reader.current_page, p_through: advTarget });
+      if (error || !data) throw error || new Error("save");
+      reader = data;
+      $("adv").hidden = true;
+      await renderHome();
+      toast(reader.khatmas > before ? "مبارك ختم القرآن، تقبَّل الله منك" : `تم تحديث تقدّمك. صفحتك التالية ${ar(reader.current_page)}`);
+    } catch {
+      // Progress may have changed elsewhere (e.g. another phone): reload it and re-check.
+      try { const fresh = await fetchReader(); if (fresh) { reader = fresh; await renderHome(); } } catch {}
+      await advUpdate();
+      toast("لم يُحفظ التحديث، تحقق من الاتصال وحاول مرة أخرى");
+    } finally {
+      advBusy = false;
+    }
   };
 
   // ---------- Reader ----------
